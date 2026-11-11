@@ -184,8 +184,40 @@ footer{padding-block:32px 48px;border-top:1px solid var(--line);color:var(--mute
   .out pre{max-height:520px}
   .steps{grid-template-columns:1fr}
 }
-@media (max-width:480px){ .row2{grid-template-columns:1fr} .nav{display:none} }
-@media (prefers-reduced-motion:reduce){ .toast{transition:none} }
+@media (max-width:600px){
+  body{font-size:15px}
+  .top{flex-direction:column;align-items:flex-start;gap:10px;padding-block:14px 6px}
+  .nav{width:100%;overflow-x:auto;gap:8px;padding-bottom:4px;-webkit-overflow-scrolling:touch;scrollbar-width:none}
+  .nav::-webkit-scrollbar{display:none}
+  .nav a{flex:none;border:1px solid var(--line);border-radius:99px;padding:6px 12px;color:var(--ink);font-size:13.5px}
+  .hero{padding-block:12px 40px;gap:24px}
+  .hero p.lead{font-size:15.5px;margin-bottom:20px}
+  .cta .btn{flex:1 1 auto;justify-content:center}
+  .screen{max-height:72vh}
+  section.block{padding-block:40px}
+  .sec-head{margin-bottom:20px}
+  .row2{grid-template-columns:1fr}
+  input[type=text],textarea,#htmlIn{font-size:16px}
+  .seg label{padding:10px 14px}
+  .chip{padding:7px 13px}
+  .out pre{max-height:360px;font-size:12px}
+  .stage{max-height:75vh}
+  .stage-tools button{padding:8px 12px;font-size:13px}
+  .show .acts button,.reel .acts button{padding:9px 12px;font-size:13.5px}
+  .btn-s{padding:11px 16px}
+  .shows,.reels{grid-template-columns:1fr}
+  .toast{bottom:calc(84px + env(safe-area-inset-bottom,0px))}
+}
+.mcopy{display:none}
+@media (max-width:900px){
+  .mcopy{position:fixed;left:0;right:0;bottom:0;z-index:15;display:flex;gap:10px;align-items:center;justify-content:space-between;
+    padding:10px max(16px,env(safe-area-inset-right,0px)) calc(10px + env(safe-area-inset-bottom,0px)) max(16px,env(safe-area-inset-left,0px));
+    background:var(--panel);border-top:1px solid var(--line);transform:translateY(110%);transition:transform .2s}
+  .mcopy.on{transform:none}
+  .mcopy span{font-size:13px;color:var(--mute);font-family:var(--f-mono);min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .mcopy .copy{flex:none;padding:11px 18px;font-size:15px}
+}
+@media (prefers-reduced-motion:reduce){ .toast,.mcopy{transition:none} }
 [hidden]{display:none!important}
 </style>
 <script src="config.js"></script>
@@ -202,7 +234,7 @@ footer{padding-block:32px 48px;border-top:1px solid var(--line);color:var(--mute
     <div>
       <div class="eyebrow">복사 → 붙여넣기 → 상영</div>
       <h1>보고 싶은 장면을<br><em>글자로</em> 상영합니다</h1>
-      <p class="lead">원하는 장면을 고르면 AI에게 그대로 붙여넣을 프롬프트가 완성됩니다. AI가 만들어 준 코드를 열면 옆 화면처럼 수천 개의 글자가 모여 영상이나 사진이 됩니다.</p>
+      <p class="lead">원하는 장면을 고르면 AI에게 그대로 붙여넣을 프롬프트가 완성됩니다. AI가 만들어 준 코드를 열면 예시 화면처럼 수천 개의 글자가 모여 영상이나 사진이 됩니다.</p>
       <div class="cta">
         <button class="btn primary" id="heroCopy" type="button">트리 프롬프트 복사</button>
         <a class="btn" href="#build">내 장면 만들기 ↓</a>
@@ -350,6 +382,11 @@ footer{padding-block:32px 48px;border-top:1px solid var(--line);color:var(--mute
         <form class="panel" id="postForm" hidden autocomplete="off">
           <h3>상영작으로 올리기</h3>
           <div class="field">
+            <label for="pnick">별명 (선택)</label>
+            <input type="text" id="pnick" placeholder="비워 두면 '익명'으로 올라가요" maxlength="20">
+            <span class="hint">구글 이름은 어디에도 표시되지 않아요.</span>
+          </div>
+          <div class="field">
             <label for="psubject">제목</label>
             <input type="text" id="psubject" placeholder="예: 눈 오는 크리스마스 트리" maxlength="40">
           </div>
@@ -408,6 +445,7 @@ footer{padding-block:32px 48px;border-top:1px solid var(--line);color:var(--mute
 
   <footer>ASCII 상영관 · 친구들과 같이 쓰는 프롬프트 모음</footer>
 </div>
+<div class="mcopy" id="mcopy" aria-hidden="true"><span id="mcopyMeta">프롬프트 완성</span><button class="copy" type="button" id="mcopyBtn" tabindex="-1">프롬프트 복사</button></div>
 <div class="toast" id="toast" role="status" aria-live="polite">복사했어요</div>
 
 <script>
@@ -522,6 +560,7 @@ function render(){
   const p=buildPrompt(readForm());
   $('#prompt').textContent=p;
   $('#meta').textContent=p.length.toLocaleString()+'자';
+  $('#mcopyMeta').textContent=readForm().subject+' · '+p.length.toLocaleString()+'자';
   const still=val('mode')==='still';
   $('#fx-rotate').disabled=still;
 }
@@ -577,6 +616,12 @@ PRESETS.forEach(pr=>{
 $('#convertPrompt').textContent=CONVERT_PROMPT;
 $('#copyConvert').onclick=()=>copyText(CONVERT_PROMPT,$('#convertPrompt'));
 $('#copyMain').onclick=()=>copyText($('#prompt').textContent,$('#prompt'));
+/* mobile: floating copy bar while the builder is on screen */
+$('#mcopyBtn').onclick=()=>copyText($('#prompt').textContent,$('#prompt'));
+if('IntersectionObserver' in window){
+  const bar=$('#mcopy');
+  new IntersectionObserver(es=>{es.forEach(e=>{const on=e.isIntersecting;bar.classList.toggle('on',on);bar.setAttribute('aria-hidden',!on);$('#mcopyBtn').tabIndex=on?0:-1;});},{threshold:0.15}).observe($('#form'));
+}
 $('#heroCopy').onclick=()=>copyText(buildPrompt(presetSettings(PRESETS[0])));
 $('#form').addEventListener('input',render);
 $('#form').addEventListener('change',render);
@@ -631,7 +676,9 @@ requestAnimationFrame(f);}f();<\/script></body></html>`;
   const MAX=230000;
   function updateSize(){const n=$('#htmlIn').value.length;$('#sizeHint').textContent=n?`${(n/1000).toFixed(1)}천 자${n>MAX?' · 너무 길어서 올릴 수는 없어요':''}`:'';}
   $('#htmlIn').addEventListener('input',updateSize);
+  if(matchMedia('(max-width:700px)').matches)setRatio(true);
   play(SAMPLE,'예시 · 글자 도넛');
+  try{const n=localStorage.getItem('asciiNick');if(n)$('#pnick').value=n;}catch(e){}
 
   /* shared list (Supabase) */
   const shows=$('#shows'),form=$('#postForm'),status=$('#pstatus');
@@ -661,7 +708,7 @@ requestAnimationFrame(f);}f();<\/script></body></html>`;
       const pre=document.createElement('pre');pre.className='ticket';pre.setAttribute('aria-hidden','true');pre.textContent=ticket(it.title||'');c.appendChild(pre);
       const h=document.createElement('h4');h.textContent=it.title||'제목 없음';c.appendChild(h);
       if(it.note){const p=document.createElement('p');p.textContent=it.note;c.appendChild(p);}
-      const by=document.createElement('div');by.className='by';const a=document.createElement('span');a.textContent=it.user_id===uid?'나':(it.author_name||'친구');
+      const by=document.createElement('div');by.className='by';const a=document.createElement('span');a.textContent=(it.author_name||'익명')+(it.user_id===uid?' (나)':'');
       const b=document.createElement('span');b.textContent=fmtDate(it.created_at);by.append(a,b);c.appendChild(by);
       const acts=document.createElement('div');acts.className='acts';
       const mk=(t,cls,fn)=>{const x=document.createElement('button');x.type='button';x.textContent=t;if(cls)x.className=cls;x.onclick=fn;acts.appendChild(x);return x;};
@@ -685,7 +732,7 @@ requestAnimationFrame(f);}f();<\/script></body></html>`;
   function updateAuth(){
     const u=session&&session.user;
     $('#authOut').hidden=!!u;$('#authIn').hidden=!u;form.hidden=!u;
-    if(u)$('#whoami').textContent=userName(u)+' 님';
+    if(u)$('#whoami').textContent='로그인됨 · 올릴 때 별명만 보여요';
   }
   async function checkAdmin(){
     isAdmin=false;if(!session)return;
@@ -700,8 +747,9 @@ requestAnimationFrame(f);}f();<\/script></body></html>`;
     if(!html){setStatus('먼저 위 칸에 HTML 코드를 붙여넣어 주세요.',true);return;}
     if(html.length>MAX){setStatus('코드가 너무 길어요(23만 자 이하만 올릴 수 있어요).',true);return;}
     if(!title){setStatus('제목을 적어 주세요.',true);return;}
+    const nick=($('#pnick').value.trim()||'익명').slice(0,20);try{localStorage.setItem('asciiNick',$('#pnick').value.trim());}catch(e){}
     $('#psend').disabled=true;setStatus('올리는 중…');
-    const row={title,note:$('#pnote').value.trim(),prompt:$('#pprompt').value.trim().slice(0,20000),html,author_name:userName(session.user)};
+    const row={title,note:$('#pnote').value.trim(),prompt:$('#pprompt').value.trim().slice(0,20000),html,author_name:nick};
     const {data,error}=await sb.from('shows').insert(row).select('id,user_id,author_name,title,note,prompt,created_at').single();
     $('#psend').disabled=false;
     if(error){setStatus(/하루에/.test(error.message)?'오늘은 더 올릴 수 없어요. 하루에 20편까지 올릴 수 있어요.':'올리지 못했어요. 잠시 뒤 다시 시도해 주세요.',true);return;}
