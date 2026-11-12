@@ -45,6 +45,15 @@ create policy "내 것 또는 관리자 삭제" on public.shows
 create policy "관리자 본인 확인" on public.admins
   for select to authenticated using (user_id = auth.uid());
 
+-- 미리보기 사진만 고칠 수 있게 (내 것 또는 관리자)
+revoke update on public.shows from anon, authenticated;
+grant update (thumb) on public.shows to authenticated;
+drop policy if exists "내 것 또는 관리자 썸네일 수정" on public.shows;
+create policy "내 것 또는 관리자 썸네일 수정" on public.shows
+  for update to authenticated
+  using (user_id = auth.uid() or exists (select 1 from public.admins a where a.user_id = auth.uid()))
+  with check (user_id = auth.uid() or exists (select 1 from public.admins a where a.user_id = auth.uid()));
+
 -- 4) 도배 방지: 한 사람당 하루 20편까지
 create or replace function public.limit_daily_shows()
 returns trigger
