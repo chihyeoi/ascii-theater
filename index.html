@@ -44,30 +44,20 @@ button{font:inherit;color:inherit;cursor:pointer}
 .nav a:hover{color:var(--ink)}
 
 /* hero */
-.hero{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,440px);gap:48px;align-items:center;padding-block:24px 64px}
-.hero h1{font-size:clamp(40px,6.4vw,72px);line-height:1.05;margin:14px 0 18px}
-.hero h1 em{font-style:normal;color:var(--gold)}
-.hero p.lead{color:var(--mute);font-size:17px;max-width:34em;margin:0 0 28px}
-.cta{display:flex;gap:12px;flex-wrap:wrap}
+.intro{display:flex;justify-content:space-between;align-items:flex-end;gap:20px 32px;flex-wrap:wrap;padding-block:12px 24px}
+.intro-text{min-width:0;flex:1 1 420px}
+.intro h1{font-size:clamp(30px,4.2vw,50px);line-height:1.1;margin:10px 0 10px}
+.intro h1 em{font-style:normal;color:var(--gold)}
+.intro p.lead{color:var(--mute);font-size:16px;max-width:40em;margin:0}
+.cta{display:flex;gap:10px;flex-wrap:wrap}
 .btn{display:inline-flex;align-items:center;gap:8px;border-radius:8px;padding:12px 18px;font-weight:600;font-size:15px;text-decoration:none;border:1px solid var(--line);background:transparent}
 .btn.primary{background:var(--gold);color:#1a1405;border-color:var(--gold)}
 .btn.primary:hover{filter:brightness(1.07)}
 .btn:not(.primary):hover{border-color:var(--mute)}
-.ai-list{margin-top:28px;font-size:13px;color:var(--mute);font-family:var(--f-mono)}
-
-.screen{position:relative;border:1px solid var(--line);border-radius:14px;overflow:hidden;background:#070a12;aspect-ratio:9/14;max-width:100%;width:100%}
-.screen canvas{display:block;width:100%;height:100%}
-.hud{position:absolute;left:0;right:0;bottom:0;padding:28px 12px 10px;background:linear-gradient(to bottom,transparent,#070a12 40%);display:flex;flex-direction:column;gap:6px;pointer-events:none}
-.hud .stats{font-family:var(--f-mono);font-size:10.5px;color:#7d889e;display:grid;grid-template-columns:auto auto;justify-content:space-between;gap:0 18px;font-variant-numeric:tabular-nums}
-.hud .stats span b{color:#b9c2d4;font-weight:400}
-.code{font-family:var(--f-mono);font-size:10px;line-height:1.5;color:#6e7a92;height:6em;overflow:hidden;white-space:pre;border-top:1px dashed #1e2a44;padding-top:6px}
-.code .k{color:#d87ab0}.code .n{color:#e3a35a}.code .f{color:#7fb4e8}.code .c{color:#4c5873}
-.tag{position:absolute;top:10px;right:12px;font-family:var(--f-mono);font-size:10px;color:var(--berry);letter-spacing:.06em}
-.replay{position:absolute;top:8px;left:10px;font-family:var(--f-mono);font-size:10.5px;color:#7d889e;background:none;border:1px solid #1e2a44;border-radius:6px;padding:3px 8px}
-.replay:hover{color:var(--ink)}
 
 /* sections */
 section.block{padding-block:56px;border-top:1px solid var(--line)}
+section.block.first{padding-block:24px 56px}
 .sec-head{display:flex;justify-content:space-between;align-items:end;gap:16px;flex-wrap:wrap;margin-bottom:28px}
 .sec-head h2{font-size:clamp(28px,4vw,40px);margin-top:6px}
 .sec-head p{color:var(--mute);margin:0;max-width:30em}
@@ -114,6 +104,14 @@ textarea{min-height:84px}
 
 /* theater */
 .theater{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,.9fr);gap:28px;align-items:start}
+#theater .theater{grid-template-columns:minmax(0,1.35fr) minmax(0,1fr);gap:24px}
+.gallery-col{display:flex;flex-direction:column;gap:10px;min-width:0}
+#theater .shows{grid-template-columns:repeat(auto-fill,minmax(170px,1fr));max-height:min(78vh,720px);overflow:auto;padding-right:4px;align-content:start}
+.gal-hint{margin:-4px 0 4px;color:var(--mute);font-size:13px}
+.more{align-self:center}
+.narrow-only{display:none}
+@media (max-width:900px){.narrow-only{display:inline}.wide-only{display:none}}
+.save-tools .ghost{margin-left:auto;border-color:var(--gold);color:var(--gold)}
 .stage-col{display:flex;flex-direction:column;gap:10px;min-width:0}
 .stage-bar{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}
 .save-tools{display:flex;align-items:center;gap:6px;flex-wrap:wrap}
@@ -147,14 +145,21 @@ textarea{min-height:84px}
 .status.err{color:var(--berry)}
 .note-box{border:1px dashed var(--line);border-radius:12px;padding:14px 16px;color:var(--mute);font-size:13.5px}
 .note-box b{color:var(--ink);font-weight:600}
-.shows-head{display:flex;justify-content:space-between;align-items:baseline;margin:40px 0 14px;gap:12px;flex-wrap:wrap}
-.shows-head h3{font-size:26px}
+.shows-head{display:flex;justify-content:space-between;align-items:baseline;gap:12px;flex-wrap:wrap}
+.shows-head h2{font-size:26px}
 .shows-head span{font-family:var(--f-mono);font-size:12px;color:var(--mute)}
 .shows{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:12px}
-.show{border:1px solid var(--line);border-radius:12px;padding:14px;display:flex;flex-direction:column;gap:8px;min-width:0}
+.show{border:1px solid var(--line);border-radius:12px;padding:0 0 12px;display:flex;flex-direction:column;gap:6px;min-width:0;overflow:hidden;background:var(--panel)}
+.show>*:not(.thumb){margin-left:12px!important;margin-right:12px!important}
+.show .thumb{position:relative;display:block;width:100%;aspect-ratio:16/10;max-width:100%;padding:0;border:0;background:#05070d;cursor:pointer;overflow:hidden}
+.show .thumb img{width:100%;height:100%;object-fit:cover;display:block}
+.show .thumb .ticket{display:flex;align-items:center;justify-content:center;height:100%}
+.show .thumb .pl{position:absolute;right:8px;bottom:8px;background:rgba(5,7,13,.8);color:var(--gold);font:600 12px var(--f-mono);border-radius:6px;padding:4px 8px}
+.show.playing .thumb .pl{background:var(--gold);color:#1a1405}
 .show.playing{border-color:var(--gold)}
 .show .ticket{font-family:var(--f-mono);font-size:10px;line-height:1.15;color:var(--gold);white-space:pre;margin:0;overflow:hidden}
-.show h4{font-family:var(--f-display);font-weight:400;font-size:20px;margin:0;overflow-wrap:anywhere}
+.show h4{margin-top:4px!important}
+.show h4{font-family:var(--f-display);font-weight:400;font-size:19px;margin:0;overflow-wrap:anywhere}
 .show p{margin:0;color:var(--mute);font-size:13px;overflow-wrap:anywhere}
 .show .by{font-family:var(--f-mono);font-size:11.5px;color:var(--mute);display:flex;justify-content:space-between;gap:8px}
 .show .acts{display:flex;gap:6px;flex-wrap:wrap;margin-top:auto;padding-top:4px}
@@ -185,8 +190,8 @@ footer{padding-block:32px 48px;border-top:1px solid var(--line);color:var(--mute
 .toast.on{opacity:1;transform:translate(-50%,0)}
 
 @media (max-width:900px){
-  .hero{grid-template-columns:1fr;gap:32px}
-  .screen{max-width:440px;margin:0 auto}
+  #theater .theater{grid-template-columns:1fr}
+  #theater .shows{max-height:none;overflow:visible;grid-template-columns:repeat(auto-fill,minmax(150px,1fr))}
   .builder,.convert{grid-template-columns:1fr}
   .out{position:static;max-height:none}
   .out pre{max-height:520px}
@@ -198,10 +203,13 @@ footer{padding-block:32px 48px;border-top:1px solid var(--line);color:var(--mute
   .nav{width:100%;overflow-x:auto;gap:8px;padding-bottom:4px;-webkit-overflow-scrolling:touch;scrollbar-width:none}
   .nav::-webkit-scrollbar{display:none}
   .nav a{flex:none;border:1px solid var(--line);border-radius:99px;padding:6px 12px;color:var(--ink);font-size:13.5px}
-  .hero{padding-block:12px 40px;gap:24px}
-  .hero p.lead{font-size:15.5px;margin-bottom:20px}
+  .intro{padding-block:6px 14px}
+  .intro p.lead{font-size:15px}
+  .cta{width:100%}
   .cta .btn{flex:1 1 auto;justify-content:center}
-  .screen{max-height:72vh}
+  #theater .shows{grid-template-columns:1fr 1fr;gap:10px}
+  .show h4{font-size:16px}
+  .save-tools .ghost{margin-left:0}
   section.block{padding-block:40px}
   .sec-head{margin-bottom:20px}
   .row2{grid-template-columns:1fr}
@@ -209,11 +217,15 @@ footer{padding-block:32px 48px;border-top:1px solid var(--line);color:var(--mute
   .seg label{padding:10px 14px}
   .chip{padding:7px 13px}
   .out pre{max-height:360px;font-size:12px}
-  .stage{max-height:75vh}
+  .stage{max-height:58vh}
+  .stage.tall{aspect-ratio:4/5}
   .stage-tools button,.save-tools button{padding:9px 12px;font-size:13.5px}
   .show .acts button,.reel .acts button{padding:9px 12px;font-size:13.5px}
+  #theater .show .acts button{padding:7px 10px;font-size:12.5px}
+  #theater .show p{display:none}
+  .save-tools .ghost{font-size:12.5px}
   .btn-s{padding:11px 16px}
-  .shows,.reels{grid-template-columns:1fr}
+  .reels{grid-template-columns:1fr}
   .toast{bottom:calc(84px + env(safe-area-inset-bottom,0px))}
 }
 .mcopy{display:none}
@@ -235,30 +247,58 @@ footer{padding-block:32px 48px;border-top:1px solid var(--line);color:var(--mute
 <div class="wrap">
   <header class="top">
     <div class="logo"><b>▚</b> ASCII 상영관</div>
-    <nav class="nav"><a href="#build">만들기</a><a href="#presets">바로 쓰기</a><a href="#theater">상영관</a><a href="#convert">내 파일 변환</a><a href="#howto">사용법</a></nav>
+    <nav class="nav"><a href="#theater">상영작</a><a href="#build">만들기</a><a href="#upload">올리기</a><a href="#presets">바로 쓰기</a><a href="#convert">내 파일 변환</a><a href="#howto">사용법</a></nav>
   </header>
 
-  <section class="hero">
-    <div>
+  <section class="intro">
+    <div class="intro-text">
       <div class="eyebrow">복사 → 붙여넣기 → 상영</div>
-      <h1>보고 싶은 장면을<br><em>글자로</em> 상영합니다</h1>
-      <p class="lead">원하는 장면을 고르면 AI에게 그대로 붙여넣을 프롬프트가 완성됩니다. AI가 만들어 준 코드를 열면 예시 화면처럼 수천 개의 글자가 모여 영상이나 사진이 됩니다.</p>
-      <div class="cta">
-        <button class="btn primary" id="heroCopy" type="button">트리 프롬프트 복사</button>
-        <a class="btn" href="#build">내 장면 만들기 ↓</a>
-      </div>
-      <div class="ai-list">Claude · ChatGPT · Gemini 어디에 붙여넣어도 됩니다</div>
+      <h1>보고 싶은 장면을 <em>글자로</em> 상영합니다</h1>
+      <p class="lead">친구들이 AI로 만든 글자 영상을 바로 아래에서 보고, 마음에 들면 같은 프롬프트로 내 장면을 만들어 보세요.</p>
     </div>
-    <div class="screen" id="screen">
-      <canvas id="stage" aria-label="글자로 그려진 회전하는 크리스마스 트리 애니메이션"></canvas>
-      <button class="replay" id="replay" type="button">↻ 다시 조립</button>
-      <div class="tag mono" id="tTag">t 0.0s</div>
-      <div class="hud">
-        <div class="stats">
-          <span>rotation <b id="hRot">0.00°</b></span><span>lights <b id="hLights">0</b></span>
-          <span>characters <b id="hChars">0</b></span><span>ascii_tree.py <b>running</b></span>
+    <div class="cta">
+      <a class="btn primary" href="#build">내 장면 만들러 가기 →</a>
+      <a class="btn" href="#upload">만든 작품 올리기</a>
+    </div>
+  </section>
+
+  <section class="block first" id="theater">
+    <div class="theater">
+      <div class="stage-col">
+        <div class="stage-bar">
+          <span class="now" id="nowPlaying">상영 중: <b>예시 · 크리스마스 트리</b></span>
+          <div class="stage-tools">
+            <button type="button" id="ratioWide" aria-pressed="true">가로</button>
+            <button type="button" id="ratioTall" aria-pressed="false">세로</button>
+            <button type="button" id="reRun">↻ 다시</button>
+            <button type="button" id="fullBtn">전체 화면</button>
+          </div>
         </div>
-        <div class="code" id="code"></div>
+        <div class="stage" id="stageBox">
+          <iframe id="runner" title="상영 화면" sandbox="allow-scripts"></iframe>
+          <div class="blocked" id="blocked" hidden>
+            <div>이 코드는 여기서 재생되지 않았어요.<br>코드가 중간에 잘렸거나, 외부 파일을 불러오는 코드일 수 있어요.</div>
+            <button type="button" class="btn-s" id="blockedCopy">HTML 복사해서 파일로 열기</button>
+          </div>
+        </div>
+        <div class="save-tools" role="group" aria-label="지금 상영 중인 작품 저장">
+          <span class="lbl-s">저장</span>
+          <button type="button" id="savePng">사진 (PNG)</button>
+          <button type="button" id="saveVid">영상 (6초)</button>
+          <button type="button" id="saveHtml">HTML 파일</button>
+          <button type="button" id="heroCopy" class="ghost">트리 프롬프트 복사</button>
+        </div>
+        <div class="save-ready" id="saveReady" hidden>
+          <span id="saveMsg">준비됐어요</span>
+          <button type="button" class="btn-s gold" id="saveGo">저장하기</button>
+          <button type="button" class="btn-s" id="saveX" aria-label="닫기">닫기</button>
+        </div>
+      </div>
+      <div class="gallery-col">
+        <div class="shows-head"><h2>친구들 상영작</h2><span><span id="showCount"></span> <button type="button" class="chip" id="reloadShows">새로고침</button></span></div>
+        <p class="gal-hint">카드를 누르면 <span class="wide-only">왼쪽</span><span class="narrow-only">위</span> 화면에서 바로 상영돼요.</p>
+        <div class="shows" id="shows"><div class="gal-empty">상영작을 불러오는 중이에요…</div></div>
+        <button type="button" class="btn-s more" id="moreShows" hidden>더 보기</button>
       </div>
     </div>
   </section>
@@ -335,58 +375,21 @@ footer{padding-block:32px 48px;border-top:1px solid var(--line);color:var(--mute
     </div>
   </section>
 
-  <section class="block" id="presets">
+  <section class="block" id="upload">
     <div class="sec-head">
-      <div><div class="eyebrow">Ready to run</div><h2>바로 쓰는 프롬프트</h2></div>
-      <p>설정이 다 끝난 장면들입니다. 바로 복사하거나, 불러와서 조금 고쳐 쓰세요.</p>
-    </div>
-    <div class="reels" id="reels"></div>
-  </section>
-
-  <section class="block" id="theater">
-    <div class="sec-head">
-      <div><div class="eyebrow">Theater</div><h2>상영관</h2></div>
-      <p>AI가 만들어 준 HTML 코드를 붙여넣으면 이 화면에서 바로 재생돼요. AI 답변을 통째로 붙여넣어도 코드만 골라서 틀어 줘요.</p>
+      <div><div class="eyebrow">Upload</div><h2>만든 작품 올리기</h2></div>
+      <p>AI가 준 HTML 코드를 붙여넣고 ▶ 상영으로 확인한 다음 올리세요. AI 답변을 통째로 붙여넣어도 코드만 골라내요.</p>
     </div>
     <div class="theater">
-      <div class="stage-col">
-        <div class="stage-bar">
-          <span class="now" id="nowPlaying">상영 중: <b>예시 · 글자 도넛</b></span>
-          <div class="stage-tools">
-            <button type="button" id="ratioWide" aria-pressed="true">가로</button>
-            <button type="button" id="ratioTall" aria-pressed="false">세로</button>
-            <button type="button" id="reRun">↻ 다시</button>
-            <button type="button" id="fullBtn">전체 화면</button>
-          </div>
-        </div>
-        <div class="save-tools" role="group" aria-label="지금 상영 중인 작품 저장">
-          <span class="lbl-s">저장</span>
-          <button type="button" id="savePng">사진 (PNG)</button>
-          <button type="button" id="saveVid">영상 (6초)</button>
-          <button type="button" id="saveHtml">HTML 파일</button>
-        </div>
-        <div class="save-ready" id="saveReady" hidden>
-          <span id="saveMsg">준비됐어요</span>
-          <button type="button" class="btn-s gold" id="saveGo">저장하기</button>
-          <button type="button" class="btn-s" id="saveX" aria-label="닫기">닫기</button>
-        </div>
-        <div class="stage" id="stageBox">
-          <iframe id="runner" title="상영 화면" sandbox="allow-scripts"></iframe>
-          <div class="blocked" id="blocked" hidden>
-            <div>이 코드는 여기서 재생되지 않았어요.<br>코드가 중간에 잘렸거나, 외부 파일을 불러오는 코드일 수 있어요.</div>
-            <button type="button" class="btn-s" id="blockedCopy">HTML 복사해서 파일로 열기</button>
-          </div>
+      <div class="panel">
+        <h3>HTML 붙여넣기</h3>
+        <textarea id="htmlIn" spellcheck="false" placeholder="AI가 준 코드를 그대로 붙여넣으세요 (<!DOCTYPE html> ... </html>)"></textarea>
+        <div class="run-row">
+          <button type="button" class="btn-s gold" id="runBtn">▶ 위 화면에서 상영</button>
+          <span class="hint" id="sizeHint"></span>
         </div>
       </div>
       <div class="side">
-        <div class="panel">
-          <h3>HTML 붙여넣기</h3>
-          <textarea id="htmlIn" spellcheck="false" placeholder="AI가 준 코드를 그대로 붙여넣으세요 (<!DOCTYPE html> ... </html>)"></textarea>
-          <div class="run-row">
-            <button type="button" class="btn-s gold" id="runBtn">▶ 상영</button>
-            <span class="hint" id="sizeHint"></span>
-          </div>
-        </div>
         <div class="note-box" id="setupNote" hidden><b>아직 저장소가 연결되지 않았어요.</b> config.js에 Supabase 주소와 키를 넣으면 로그인과 상영작 올리기가 켜져요. 붙여넣기 상영은 지금도 쓸 수 있어요.</div>
         <div class="panel" id="authBox">
           <div class="auth-row" id="authOut">
@@ -423,8 +426,14 @@ footer{padding-block:32px 48px;border-top:1px solid var(--line);color:var(--mute
         </form>
       </div>
     </div>
-    <div class="shows-head"><h3>친구들 상영작</h3><span><span id="showCount"></span> <button type="button" class="chip" id="reloadShows">새로고침</button></span></div>
-    <div class="shows" id="shows"><div class="gal-empty">상영작을 불러오는 중이에요…</div></div>
+  </section>
+
+  <section class="block" id="presets">
+    <div class="sec-head">
+      <div><div class="eyebrow">Ready to run</div><h2>바로 쓰는 프롬프트</h2></div>
+      <p>설정이 다 끝난 장면들입니다. 바로 복사하거나, 불러와서 조금 고쳐 쓰세요.</p>
+    </div>
+    <div class="reels" id="reels"></div>
   </section>
 
   <section class="block" id="convert">
@@ -458,7 +467,7 @@ footer{padding-block:32px 48px;border-top:1px solid var(--line);color:var(--mute
     <div class="steps">
       <div class="step"><div class="num">1</div><h3>복사</h3><p>위에서 장면을 고르고 <code>프롬프트 복사</code>를 누릅니다.</p></div>
       <div class="step"><div class="num">2</div><h3>붙여넣기</h3><p>Claude, ChatGPT, Gemini 등 쓰는 AI 대화창에 붙여넣고 보냅니다. 코드가 길어서 잘리면 <code>이어서 계속 써 줘</code>라고 보내세요.</p></div>
-      <div class="step"><div class="num">3</div><h3>상영</h3><p>AI가 준 HTML 코드를 통째로 복사해 이 사이트의 <code>상영관</code>에 붙여넣고 상영을 누릅니다. 마음에 들면 그대로 상영작으로 올리세요.</p></div>
+      <div class="step"><div class="num">3</div><h3>상영</h3><p>AI가 준 HTML 코드를 통째로 복사해 이 사이트의 <code>만든 작품 올리기</code> 칸에 붙여넣고 상영을 누릅니다. 마음에 들면 그대로 상영작으로 올리세요.</p></div>
     </div>
   </section>
 
@@ -467,6 +476,170 @@ footer{padding-block:32px 48px;border-top:1px solid var(--line);color:var(--mute
 <div class="mcopy" id="mcopy" aria-hidden="true"><span id="mcopyMeta">프롬프트 완성</span><button class="copy" type="button" id="mcopyBtn" tabindex="-1">프롬프트 복사</button></div>
 <div class="toast" id="toast" role="status" aria-live="polite">복사했어요</div>
 
+<script type="text/plain" id="treeHead"><!DOCTYPE html><html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><style>
+:root{--ink:#e7ebf3;--berry:#e2574c}
+html,body{margin:0;height:100%;background:#070a12;overflow:hidden;-webkit-tap-highlight-color:transparent;user-select:none}
+.screen{position:fixed;inset:0;background:#070a12}
+.screen canvas{display:block;width:100%;height:100%;touch-action:manipulation}
+.hud{position:absolute;left:0;right:0;bottom:0;padding:28px 12px 10px;background:linear-gradient(to bottom,transparent,#070a12 40%);display:flex;flex-direction:column;gap:6px;pointer-events:none;font-family:ui-monospace,Menlo,Consolas,monospace}
+.hud .stats{font-size:10.5px;color:#7d889e;display:grid;grid-template-columns:auto auto;justify-content:space-between;gap:0 18px;font-variant-numeric:tabular-nums}
+.hud .stats span b{color:#b9c2d4;font-weight:400}
+.code{font-size:10px;line-height:1.5;color:#6e7a92;height:6em;overflow:hidden;white-space:pre;border-top:1px dashed #1e2a44;padding-top:6px}
+.code .k{color:#d87ab0}.code .n{color:#e3a35a}.code .f{color:#7fb4e8}.code .c{color:#4c5873}
+.tag{position:absolute;top:10px;right:12px;font:10px ui-monospace,Menlo,monospace;color:var(--berry);letter-spacing:.06em}
+.replay{position:absolute;top:8px;left:10px;font:10.5px ui-monospace,Menlo,monospace;color:#7d889e;background:none;border:1px solid #1e2a44;border-radius:6px;padding:3px 8px;cursor:pointer}
+</style></head><body><div class="screen" id="screen"><canvas id="stage"></canvas><button class="replay" id="replay" type="button">↻ 다시 조립</button><div class="tag" id="tTag">t 0.0s</div><div class="hud"><div class="stats"><span>rotation <b id="hRot">0.00°</b></span><span>lights <b id="hLights">0</b></span><span>characters <b id="hChars">0</b></span><span>ascii_tree.py <b>running</b></span></div><div class="code" id="code"></div></div></div></script>
+<script type="text/plain" id="treeSrc">const $=s=>document.querySelector(s);
+/* ---------------- live ASCII tree ---------------- */
+(function(){
+  const cv=$('#stage'),ctx=cv.getContext('2d');
+  const reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
+  let rnd=(()=>{let s=7;return()=>{s=(s*16807)%2147483647;return (s-1)/2147483646;};})();
+  const P={x:[],y:[],z:[],nx:[],ny:[],nz:[],r:[],g:[],b:[],t0:[],k:[],ph:[]};
+  function add(x,y,z,nx,ny,nz,r,g,b,t0,k){const l=Math.hypot(nx,ny,nz)||1;
+    P.x.push(x);P.y.push(y);P.z.push(z);P.nx.push(nx/l);P.ny.push(ny/l);P.nz.push(nz/l);P.r.push(r);P.g.push(g);P.b.push(b);P.t0.push(t0);P.k.push(k);P.ph.push(rnd()*6.28);}
+  const Y0=0.28,Y1=2.55,TAU=Math.PI*2;
+  const R=f=>1.08*Math.pow(1-f,1.05)+0.03;
+  // ground
+  for(let i=0;i<2600;i++){const rr=1.85*Math.sqrt(rnd()),a=rnd()*TAU;const c=0.75+rnd()*0.25;
+    add(rr*Math.cos(a),(rnd()-.5)*0.02,rr*Math.sin(a),0,1,0,c*0.92,c*0.96,c*1.05,0.1+rr/1.85*1.0,4);}
+  // trunk
+  for(let i=0;i<260;i++){const a=rnd()*TAU,y=rnd()*0.32;add(.13*Math.cos(a),y,.13*Math.sin(a),Math.cos(a),0,Math.sin(a),.42,.26,.13,1.1+y,0);}
+  // foliage (tiered, drooping)
+  const TIERS=9;
+  for(let i=0;i<7600;i++){const f=1-Math.sqrt(rnd());const y=Y0+(Y1-Y0)*f;const tf=(f*TIERS)%1;
+    let rad=R(f)*(1-0.3*tf);const s=Math.pow(rnd(),0.35);rad*=s;const a=rnd()*TAU;
+    const yy=y-0.06*(1-tf)*s;let cr=.10+rnd()*.10,cg=.38+rnd()*.25,cb=.16+rnd()*.08;
+    if(rnd()<0.12){cr=.30;cg=.68;cb=.32;}
+    if(s>0.93&&rnd()<0.07){cr=.86;cg=.9;cb=.95;}
+    add(rad*Math.cos(a),yy,rad*Math.sin(a),Math.cos(a),0.55,Math.sin(a),cr,cg,cb,1.4+f*3.6+rnd()*0.3,0);}
+  // garland spiral
+  for(let i=0;i<1000;i++){const u=i/1000;const f=0.04+0.88*u;const y=Y0+(Y1-Y0)*f;const a=TAU*3.6*u;const rad=R(f)*0.96+0.03;
+    add(rad*Math.cos(a),y-0.05*Math.abs(Math.sin(a*2.2)),rad*Math.sin(a),Math.cos(a),0.3,Math.sin(a),1,.76,.28,5.2+u*1.3,2);}
+  // ornaments
+  for(let o=0;o<34;o++){const f=0.05+rnd()*0.8,a=rnd()*TAU,y=Y0+(Y1-Y0)*f,rad=R(f)*0.93;
+    const cx=rad*Math.cos(a),cz=rad*Math.sin(a),pick=rnd();const col=pick<.6?[.88,.12,.13]:pick<.9?[.96,.7,.2]:[.8,.84,.9];
+    const t0=6.4+rnd()*1.2;
+    for(let j=0;j<46;j++){const u=rnd()*2-1,th=rnd()*TAU,q=Math.sqrt(1-u*u);const nx=q*Math.cos(th),ny=u,nz=q*Math.sin(th);
+      add(cx+nx*.075,y+ny*.075,cz+nz*.075,nx,ny,nz,col[0],col[1],col[2],t0,0);}}
+  // lights
+  for(let i=0;i<170;i++){const f=0.03+rnd()*0.9,a=rnd()*TAU,y=Y0+(Y1-Y0)*f,rad=R(f)*(0.9+rnd()*0.08);
+    const w=rnd();const c=w<.7?[1,.86,.5]:w<.85?[1,.45,.35]:[.55,.75,1];
+    add(rad*Math.cos(a),y,rad*Math.sin(a),Math.cos(a),0,Math.sin(a),c[0],c[1],c[2],6.8+rnd()*1.0,1);}
+  // gifts
+  const gifts=[[0.95,0.6,.34,.88,.14,.14],[-1.05,0.4,.3,.2,.32,.85],[0.2,-1.15,.26,.96,.72,.2],[-0.55,1.05,.36,.85,.12,.16],[1.25,-0.45,.22,.2,.32,.85]];
+  gifts.forEach((g,gi)=>{const [gx,gz,sz,r,gg,b]=g;const t0=7.6+gi*0.3;
+    for(let j=0;j<420;j++){const face=Math.floor(rnd()*5);let u=rnd()*2-1,v=rnd()*2-1;let x,y,z,n;
+      if(face===0){x=u;y=1;z=v;n=[0,1,0];}else if(face===1){x=1;y=v;z=u;n=[1,0,0];}else if(face===2){x=-1;y=v;z=u;n=[-1,0,0];}else if(face===3){x=u;y=v;z=1;n=[0,0,1];}else{x=u;y=v;z=-1;n=[0,0,-1];}
+      const rib=Math.abs(x)<.12||Math.abs(z)<.12;const c=rib?[1,.85,.45]:[r,gg,b];
+      add(gx+x*sz*.5,(y+1)*sz*.42,gz+z*sz*.5,n[0],n[1],n[2],c[0],c[1],c[2],t0,rib?2:0);}});
+  // star
+  for(let i=0;i<160;i++){const u=rnd()*2-1,th=rnd()*TAU,q=Math.sqrt(1-u*u),rr=0.06*Math.cbrt(rnd());
+    add(q*Math.cos(th)*rr*1.3,Y1+0.12+u*rr,q*Math.sin(th)*rr*1.3,0,0,1,1,.84,.3,8.6,3);}
+  const N=P.x.length;
+  const A={};for(const k in P)A[k]=Float32Array.from(P[k]);
+  const LIGHTS=P.k.filter(k=>k===1).length;
+
+  const RAMP=' .:-=+*#%@',SCR='01#%@*&$';
+  let W=0,H=0,dpr=1,fs=8,cw=5,ch=8,cols=0,rows=0,zb,ci,cr,cg,cbb,ck;
+  function resize(){const r=cv.getBoundingClientRect();if(!r.width)return;dpr=Math.min(2,window.devicePixelRatio||1);
+    W=r.width;H=r.height;cv.width=Math.round(W*dpr);cv.height=Math.round(H*dpr);
+    fs=Math.max(5.5,Math.min(9,W/68));cw=fs*0.6;ch=fs*1.02;cols=Math.floor(W/cw);rows=Math.floor(H/ch);
+    const n=cols*rows;zb=new Float32Array(n);ci=new Uint8Array(n);cr=new Uint8Array(n);cg=new Uint8Array(n);cbb=new Uint8Array(n);ck=new Uint8Array(n);}
+  const flakes=[];for(let i=0;i<110;i++)flakes.push({x:Math.random(),y:Math.random(),v:0.01+Math.random()*0.03,c:Math.random()<.2?'*':'.'});
+
+  let start=performance.now(),last=0;const LOOP=30;
+  function restart(){start=performance.now();}
+  $('#replay').onclick=restart;cv.addEventListener('click',restart);
+
+  const codeLines=[
+    ['c','# ascii_tree.py — point cloud → characters'],
+    ['k','def ','f','fib','','(n):'],['','    i = np.arange(n) + ','n','0.5'],['','    y = ','n','1',''," - 2 * i / n"],
+    ['','    th = np.pi * (','n','3',''," - np.sqrt(",'n','5','',')) * i'],
+    ['k','def ','f','envelope','','(y):'],['','    f = np.clip((y - Y0) / (Y1 - Y0), ','n','0',', ','n','1','',')'],
+    ['k','    return ','n','1.08','',' * (1 - f) ** ','n','1.05'],
+    ['c','# --- foliage: tiers of drooping branches'],['','tiers = np.linspace(Y0, Y1, ','n','9','',')'],
+    ['k','for ','','i, y ','k','in ','','enumerate(tiers):'],['','    R = envelope(y) * (1 - ','n','0.3','',' * tf)'],
+    ['c','# --- the tinsel garland: a gold spiral'],['','u = np.linspace(','n','0',', ','n','1',', ','n','1000','',')'],
+    ['','turns = ','n','3.6'],['','lum = ','n','0.25','',' + diffuse(n @ L)'],['','ch = RAMP[(lum * ','n','9.99','',').astype(int)]'],
+    ['','zbuf = np.maximum.at(zbuf, idx, 1 / depth)'],['','render(grid, colors)']];
+  const esc=s=>s.replace(/&/g,'&amp;').replace(/</g,'&lt;');
+  function lineHTML(parts,limit){let out='',n=0;for(let i=0;i<parts.length;i+=2){const cls=parts[i],txt=parts[i+1]||'';
+    if(n>=limit)break;const t=txt.slice(0,limit-n);n+=t.length;out+=cls?`<span class="${cls}">${esc(t)}</span>`:esc(t);}return out;}
+  const lineLen=parts=>{let n=0;for(let i=1;i<parts.length;i+=2)n+=(parts[i]||'').length;return n;};
+  const codeEl=$('#code');let lastCode='';
+  function drawCode(t){let budget=Math.floor(t*38);const shown=[];
+    for(const ln of codeLines){const len=lineLen(ln);if(budget<=0)break;shown.push(lineHTML(ln,budget));budget-=len+4;}
+    const html=shown.slice(-4).join('\n');if(html!==lastCode){codeEl.innerHTML=html;lastCode=html;}}
+
+  const Lx=-0.45,Ly=0.62,Lz=0.64;
+  function frame(now){
+    requestAnimationFrame(frame);
+    if(now-last<33)return;last=now;
+    if(!cols){resize();if(!cols)return;}
+    let t=(now-start)/1000; if(reduce&&t<10)t=10+t; if(t>LOOP){restart();t=0;}
+    const fade=t>LOOP-2?Math.max(0,(LOOP-t)/2):1;
+    const ang=t*0.32, ca=Math.cos(ang), sa=Math.sin(ang), pitch=0.3, cp=Math.cos(pitch), sp=Math.sin(pitch);
+    const D=6.2, F=0.70*H*D/3.3, cx=W/2, cy=H*0.38;
+    zb.fill(0);ck.fill(0);
+    let starX=-1,starY=-1;
+    for(let i=0;i<N;i++){
+      const t0=A.t0[i]; if(t<t0)continue;
+      const x=A.x[i],y=A.y[i]-1.25,z=A.z[i];
+      const xr=x*ca+z*sa, zr=-x*sa+z*ca;
+      const y2=y*cp-zr*sp, z2=y*sp+zr*cp;
+      const depth=D-z2; const inv=1/depth;
+      const sx=cx+xr*F*inv, sy=cy-y2*F*inv;
+      const c=(sx/cw)|0, r=(sy/ch)|0; if(c<0||r<0||c>=cols||r>=rows)continue;
+      const id=r*cols+c; if(inv<=zb[id])continue;
+      zb[id]=inv;
+      const k=A.k[i]; let lum;
+      if(k===0){const nx=A.nx[i]*ca+A.nz[i]*sa, nz=-A.nx[i]*sa+A.nz[i]*ca; const d=nx*Lx+A.ny[i]*Ly+nz*Lz; lum=0.22+0.85*Math.max(0,d);}
+      else if(k===1){lum=0.55+0.45*Math.sin(t*3.1+A.ph[i]);}
+      else if(k===2){const nx=A.nx[i]*ca+A.nz[i]*sa, nz=-A.nx[i]*sa+A.nz[i]*ca; lum=0.5+0.5*Math.max(0,nx*Lx+A.ny[i]*Ly+nz*Lz)+0.15*Math.sin(t*5+A.ph[i]);}
+      else if(k===4){lum=0.28+0.3*((A.ph[i]*1.7)%1);}
+      else {lum=1; starX=sx; starY=sy;}
+      lum=Math.min(1,Math.max(0,lum));
+      const age=t-t0;
+      if(age<0.35&&k!==3){ci[id]=200+((i+((t*20)|0))%SCR.length);cr[id]=230;cg[id]=240;cbb[id]=255;ck[id]=6;}
+      else{ci[id]=Math.min(9,Math.max(1,(lum*9.99)|0));const m=(0.35+0.8*lum)*255*fade;
+        cr[id]=Math.min(255,A.r[i]*m);cg[id]=Math.min(255,A.g[i]*m);cbb[id]=Math.min(255,A.b[i]*m);ck[id]=k+1;}
+    }
+    ctx.setTransform(dpr,0,0,dpr,0,0);
+    ctx.fillStyle='#070a12';ctx.fillRect(0,0,W,H);
+    ctx.font=`${fs}px "JetBrains Mono",ui-monospace,Menlo,monospace`;ctx.textBaseline='top';
+    // snow
+    ctx.fillStyle='rgba(200,210,230,0.55)';
+    for(const f of flakes){if(!reduce){f.y+=f.v*0.033;f.x+=Math.sin(t+f.v*90)*0.0004;if(f.y>1){f.y=0;f.x=Math.random();}}
+      ctx.fillText(f.c,f.x*W,f.y*H*0.78);}
+    let chars=0;
+    const glow=[];
+    for(let r=0;r<rows;r++)for(let c=0;c<cols;c++){const id=r*cols+c;if(!ck[id])continue;chars++;
+      const ch_=ci[id]>=200?SCR[ci[id]-200]:RAMP[ci[id]];
+      ctx.fillStyle=`rgb(${cr[id]},${cg[id]},${cbb[id]})`;ctx.fillText(ch_,c*cw,r*ch);
+      if(ck[id]===2||ck[id]===4)glow.push(id);}
+    // glow pass for lights and star
+    ctx.shadowBlur=8;
+    for(const id of glow){const c=id%cols,r=(id/cols)|0;ctx.shadowColor=`rgb(${cr[id]},${cg[id]},${cbb[id]})`;ctx.fillStyle=ctx.shadowColor;ctx.fillText(RAMP[ci[id]]||'*',c*cw,r*ch);}
+    // star rays
+    if(starX>0){ctx.shadowColor='rgba(242,193,78,.9)';ctx.fillStyle=`rgba(242,193,78,${0.75*fade})`;
+      const rays=[[0,-1,'|'],[0,1,'|'],[1,0,'-'],[-1,0,'-'],[.7,-.7,'/'],[-.7,-.7,'\\'],[.7,.7,'\\'],[-.7,.7,'/']];
+      const pulse=0.5+0.5*Math.sin(t*2);
+      ctx.shadowBlur=4;
+      for(const [dx,dy,g] of rays){const len=(dy<0?7:4)+pulse*2;for(let s=2;s<len;s++){
+        ctx.fillStyle=`rgba(242,200,90,${(1-s/len)*0.7*fade})`;ctx.fillText(g,starX+dx*s*cw*1.1-cw*.3,starY+dy*s*ch*0.9-ch*.5);}}}
+    ctx.shadowBlur=0;
+    // HUD
+    $('#hRot').textContent=((ang*180/Math.PI)%360).toFixed(2)+'°';
+    $('#hChars').textContent=chars.toLocaleString('en-US');
+    $('#hLights').textContent=t>6.8?Math.min(LIGHTS,Math.floor((t-6.8)/1.0*LIGHTS)):0;
+    $('#tTag').textContent='t '+t.toFixed(1)+'s';
+    drawCode(t);
+  }
+  new ResizeObserver(resize).observe(cv);
+  requestAnimationFrame(frame);
+})();
+</script>
 <script>
 /* ---------------- presets ---------------- */
 const PRESETS=[
@@ -667,18 +840,9 @@ loadPreset(PRESETS[0]);
 
 /* ---------------- theater + shared gallery ---------------- */
 (function(){
-  const SAMPLE=`<!DOCTYPE html><html><head><meta charset="utf-8"><style>html,body{margin:0;height:100%;background:#0a0e18;overflow:hidden}canvas{display:block;width:100%;height:100%}</style></head><body><canvas id="c"></canvas><script>
-const c=document.getElementById('c'),x=c.getContext('2d');let A=1,B=1;const R='.,-~:;=!*#$@';
-function f(){const W=c.width=innerWidth*devicePixelRatio,H=c.height=innerHeight*devicePixelRatio;const fs=Math.max(8,Math.min(W,H)/48);const cols=Math.floor(W/(fs*.6)),rows=Math.floor(H/fs);
-const o=new Array(cols*rows).fill(' '),z=new Float32Array(cols*rows),col=new Float32Array(cols*rows);A+=.03;B+=.017;const cA=Math.cos(A),sA=Math.sin(A),cB=Math.cos(B),sB=Math.sin(B);const S=Math.min(cols*.6,rows*1.2)*.45;
-for(let j=0;j<6.28;j+=.05)for(let i=0;i<6.28;i+=.015){const ct=Math.cos(j),st=Math.sin(j),cp=Math.cos(i),sp=Math.sin(i),h=ct+2,D=1/(sp*h*sA+st*cA+5),t=sp*h*cA-st*sA;
-const X=Math.floor(cols/2+S*1.6*D*(cp*h*cB-t*sB)),Y=Math.floor(rows/2+S*.8*D*(cp*h*sB+t*cB)),o2=X+cols*Y,N=8*((st*sA-sp*ct*cA)*cB-sp*ct*sA-st*cA-cp*ct*sB);
-if(Y>=0&&Y<rows&&X>=0&&X<cols&&D>z[o2]){z[o2]=D;o[o2]=R[Math.max(0,N|0)];col[o2]=Math.max(0,N)/11;}}
-x.fillStyle='#0a0e18';x.fillRect(0,0,W,H);x.font=fs+'px monospace';x.textBaseline='top';
-for(let k=0;k<o.length;k++){if(o[k]===' ')continue;const v=col[k];x.fillStyle='rgb('+(140+115*v|0)+','+(90+110*v|0)+','+(40+40*v|0)+')';x.fillText(o[k],(k%cols)*fs*.6,Math.floor(k/cols)*fs);}
-requestAnimationFrame(f);}f();<\/script></body></html>`;
+  const SAMPLE=document.getElementById('treeHead').textContent+'<script>'+document.getElementById('treeSrc').textContent+'</'+'script></body></html>';
   const runner=$('#runner'),blocked=$('#blocked'),stageBox=$('#stageBox');
-  let current={html:SAMPLE,title:'예시 · 글자 도넛'},runId=0,aliveId=-1,aliveTimer=null;
+  let current={html:SAMPLE,title:'예시 · 크리스마스 트리'},runId=0,aliveId=-1,aliveTimer=null;
 
   function extractHTML(t){
     t=(t||'').trim();
@@ -720,7 +884,7 @@ r.start(250);setTimeout(function(){try{r.stop();}catch(err){}},(d.seconds||6)*10
   }
   runner.addEventListener('load',()=>{const id=runId;clearTimeout(aliveTimer);if(aliveId===id)return;aliveTimer=setTimeout(()=>{if(id===runId&&aliveId!==id)blocked.hidden=false;},3000);});
   $('#runBtn').onclick=()=>{const h=extractHTML($('#htmlIn').value);if(!h){toast('먼저 HTML 코드를 붙여넣어 주세요');return;}
-    $('#htmlIn').value=h;updateSize();play(h,'붙여넣은 코드');};
+    $('#htmlIn').value=h;updateSize();play(h,'붙여넣은 코드');document.getElementById('theater').scrollIntoView({behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth'});};
   $('#reRun').onclick=()=>play(current.html,current.title);
   $('#blockedCopy').onclick=()=>copyText(current.html);
   function setRatio(tall){stageBox.classList.toggle('tall',tall);$('#ratioTall').setAttribute('aria-pressed',tall);$('#ratioWide').setAttribute('aria-pressed',!tall);}
@@ -751,10 +915,16 @@ r.start(250);setTimeout(function(){try{r.stop();}catch(err){}},(d.seconds||6)*10
   $('#saveHtml').onclick=()=>{offer(new Blob([current.html],{type:'text/html'}),fname('html'),'HTML 파일을 준비했어요. 열면 어디서든 재생돼요');};
   $('#fullBtn').onclick=()=>{try{const r=stageBox.requestFullscreen&&stageBox.requestFullscreen();if(r&&r.catch)r.catch(()=>toast('이 화면에서는 전체 화면을 쓸 수 없어요'));}catch(e){toast('이 화면에서는 전체 화면을 쓸 수 없어요');}};
   const MAX=230000;
+  async function thumbOf(html){
+    if(current.html!==html){play(html,'올리는 작품 미리보기');await new Promise(r=>setTimeout(r,4500));}
+    const r=await ask('snap',{},6000);if(!r.blob)return '';
+    try{const bmp=await createImageBitmap(r.blob);const w=480,h=Math.round(w*bmp.height/bmp.width);const c=document.createElement('canvas');c.width=w;c.height=Math.min(h,600);
+      c.getContext('2d').drawImage(bmp,0,0,w,h);return c.toDataURL('image/jpeg',0.72);}catch(e){return '';}
+  }
   function updateSize(){const n=$('#htmlIn').value.length;$('#sizeHint').textContent=n?`${(n/1000).toFixed(1)}천 자${n>MAX?' · 너무 길어서 올릴 수는 없어요':''}`:'';}
   $('#htmlIn').addEventListener('input',updateSize);
-  if(matchMedia('(max-width:700px)').matches)setRatio(true);
-  play(SAMPLE,'예시 · 글자 도넛');
+  setRatio(matchMedia('(max-width:700px)').matches);
+  play(SAMPLE,'예시 · 크리스마스 트리');
   try{const n=localStorage.getItem('asciiNick');if(n)$('#pnick').value=n;}catch(e){}
 
   /* shared list (Supabase) */
@@ -775,24 +945,31 @@ r.start(250);setTimeout(function(){try{r.stop();}catch(err){}},(d.seconds||6)*10
     if(error)throw error; it.html=data.html; return it.html;
   }
 
+  const mobile=()=>matchMedia('(max-width:900px)').matches;
+  async function playItem(it){try{const html=await getHTML(it);playingId=it.id;play(html,it.title||'상영작');render();
+    if(mobile())document.getElementById('theater').scrollIntoView({behavior:smooth()});}catch(e){toast('상영작을 불러오지 못했어요');}}
   function render(){
-    $('#showCount').textContent=items.length?items.length+'편':'';
-    if(!items.length){shows.innerHTML='<div class="gal-empty">아직 상영작이 없어요. 위에서 HTML을 붙여넣고 첫 번째로 올려 주세요.</div>';return;}
+    $('#showCount').textContent=items.length?items.length+(hasMore?'+':'')+'편':'';
+    $('#moreShows').hidden=!hasMore;
+    if(!items.length){shows.innerHTML='<div class="gal-empty">아직 상영작이 없어요.<br>아래 <a href="#upload">만든 작품 올리기</a>에서 첫 번째로 올려 주세요.</div>';return;}
     const uid=session&&session.user.id;
     shows.textContent='';
     items.forEach(it=>{
       const c=document.createElement('article');c.className='show'+(playingId===it.id?' playing':'');
-      const pre=document.createElement('pre');pre.className='ticket';pre.setAttribute('aria-hidden','true');pre.textContent=ticket(it.title||'');c.appendChild(pre);
+      const th=document.createElement('button');th.type='button';th.className='thumb';th.setAttribute('aria-label',(it.title||'상영작')+' 상영하기');
+      if(it.thumb){const im=document.createElement('img');im.src=it.thumb;im.alt='';im.loading='lazy';th.appendChild(im);}
+      else{const pre=document.createElement('pre');pre.className='ticket';pre.setAttribute('aria-hidden','true');pre.textContent=ticket(it.title||'');th.appendChild(pre);}
+      const pl=document.createElement('span');pl.className='pl';pl.textContent=playingId===it.id?'상영 중':'▶ 상영';th.appendChild(pl);
+      th.onclick=()=>playItem(it);c.appendChild(th);
       const h=document.createElement('h4');h.textContent=it.title||'제목 없음';c.appendChild(h);
       if(it.note){const p=document.createElement('p');p.textContent=it.note;c.appendChild(p);}
       const by=document.createElement('div');by.className='by';const a=document.createElement('span');a.textContent=(it.author_name||'익명')+(it.user_id===uid?' (나)':'');
       const b=document.createElement('span');b.textContent=fmtDate(it.created_at);by.append(a,b);c.appendChild(by);
       const acts=document.createElement('div');acts.className='acts';
       const mk=(t,cls,fn)=>{const x=document.createElement('button');x.type='button';x.textContent=t;if(cls)x.className=cls;x.onclick=fn;acts.appendChild(x);return x;};
-      mk('▶ 상영','play',async()=>{try{const html=await getHTML(it);playingId=it.id;play(html,it.title||'상영작');render();document.getElementById('theater').scrollIntoView({behavior:smooth()});}catch(e){toast('상영작을 불러오지 못했어요');}});
-      mk('코드 가져오기','',async()=>{try{const html=await getHTML(it);$('#htmlIn').value=html;$('#htmlIn').dispatchEvent(new Event('input'));copyText(html,null);document.getElementById('theater').scrollIntoView({behavior:smooth()});}catch(e){toast('코드를 불러오지 못했어요');}});
       if(it.prompt)mk('프롬프트 복사','',()=>copyText(it.prompt));
-      if(uid&&(it.user_id===uid||isAdmin)){let armed=false;const d=mk('내리기','del',async()=>{if(!armed){armed=true;d.textContent='한 번 더 누르면 삭제';setTimeout(()=>{armed=false;d.textContent='내리기';},3000);return;}
+      mk('코드','',async()=>{try{const html=await getHTML(it);$('#htmlIn').value=html;$('#htmlIn').dispatchEvent(new Event('input'));copyText(html,null);document.getElementById('upload').scrollIntoView({behavior:smooth()});}catch(e){toast('코드를 불러오지 못했어요');}});
+      if(uid&&(it.user_id===uid||isAdmin)){let armed=false;const d=mk('내리기','del',async()=>{if(!armed){armed=true;d.textContent='한 번 더';setTimeout(()=>{armed=false;d.textContent='내리기';},3000);return;}
         const {data,error}=await sb.from('shows').delete().eq('id',it.id).select('id');
         if(error||!data||!data.length){toast('내리지 못했어요');return;}
         items=items.filter(x=>x.id!==it.id);render();toast('상영작을 내렸어요');});}
@@ -800,11 +977,20 @@ r.start(250);setTimeout(function(){try{r.stop();}catch(err){}},(d.seconds||6)*10
     });
   }
 
-  async function load(){
-    const {data,error}=await sb.from('shows').select('id,user_id,author_name,title,note,prompt,created_at').order('created_at',{ascending:false}).limit(300);
-    if(error){shows.innerHTML='<div class="gal-empty">상영작을 불러오지 못했어요. 잠시 뒤 새로고침해 주세요.</div>';return;}
-    items=data||[];render();
+  const PAGE=24;let hasMore=false,hasThumb=true;
+  const COLS=()=>'id,user_id,author_name,title,note,prompt,created_at'+(hasThumb?',thumb':'');
+  async function fetchPage(from){
+    let r=await sb.from('shows').select(COLS()).order('created_at',{ascending:false}).range(from,from+PAGE);
+    if(r.error&&hasThumb&&/thumb/.test(r.error.message||'')){hasThumb=false;r=await sb.from('shows').select(COLS()).order('created_at',{ascending:false}).range(from,from+PAGE);}
+    return r;
   }
+  async function load(){
+    const {data,error}=await fetchPage(0);
+    if(error){shows.innerHTML='<div class="gal-empty">상영작을 불러오지 못했어요. 잠시 뒤 새로고침해 주세요.</div>';return;}
+    hasMore=data.length>PAGE;items=data.slice(0,PAGE);render();
+  }
+  $('#moreShows').onclick=async()=>{const b=$('#moreShows');b.disabled=true;const {data,error}=await fetchPage(items.length);b.disabled=false;
+    if(error){toast('더 불러오지 못했어요');return;}hasMore=data.length>PAGE;items=items.concat(data.slice(0,PAGE));render();};
 
   function updateAuth(){
     const u=session&&session.user;
@@ -825,12 +1011,17 @@ r.start(250);setTimeout(function(){try{r.stop();}catch(err){}},(d.seconds||6)*10
     if(html.length>MAX){setStatus('코드가 너무 길어요(23만 자 이하만 올릴 수 있어요).',true);return;}
     if(!title){setStatus('제목을 적어 주세요.',true);return;}
     const nick=($('#pnick').value.trim()||'익명').slice(0,20);try{localStorage.setItem('asciiNick',$('#pnick').value.trim());}catch(e){}
-    $('#psend').disabled=true;setStatus('올리는 중…');
+    $('#psend').disabled=true;setStatus('미리보기 사진 찍는 중…');
+    const thumb=hasThumb?await thumbOf(html):'';
+    setStatus('올리는 중…');
     const row={title,note:$('#pnote').value.trim(),prompt:$('#pprompt').value.trim().slice(0,20000),html,author_name:nick};
-    const {data,error}=await sb.from('shows').insert(row).select('id,user_id,author_name,title,note,prompt,created_at').single();
+    if(thumb&&thumb.length<290000)row.thumb=thumb;
+    let {data,error}=await sb.from('shows').insert(row).select('id,user_id,author_name,title,note,prompt,created_at').single();
+    if(error&&row.thumb&&/thumb/.test(error.message||'')){hasThumb=false;delete row.thumb;({data,error}=await sb.from('shows').insert(row).select('id,user_id,author_name,title,note,prompt,created_at').single());}
+    if(data&&row.thumb)data.thumb=row.thumb;
     $('#psend').disabled=false;
     if(error){setStatus(/하루에/.test(error.message)?'오늘은 더 올릴 수 없어요. 하루에 20편까지 올릴 수 있어요.':'올리지 못했어요. 잠시 뒤 다시 시도해 주세요.',true);return;}
-    data.html=html;items.unshift(data);playingId=data.id;render();play(html,title);
+    data.html=html;items.unshift(data);playingId=data.id;render();play(html,title);document.getElementById('theater').scrollIntoView({behavior:smooth()});
     ['#psubject','#pnote','#pprompt'].forEach(s=>$(s).value='');setStatus('');toast('상영작을 올렸어요');
   });
 
@@ -847,155 +1038,6 @@ r.start(250);setTimeout(function(){try{r.stop();}catch(err){}},(d.seconds||6)*10
   }
 })();
 
-/* ---------------- live ASCII tree ---------------- */
-(function(){
-  const cv=$('#stage'),ctx=cv.getContext('2d');
-  const reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
-  let rnd=(()=>{let s=7;return()=>{s=(s*16807)%2147483647;return (s-1)/2147483646;};})();
-  const P={x:[],y:[],z:[],nx:[],ny:[],nz:[],r:[],g:[],b:[],t0:[],k:[],ph:[]};
-  function add(x,y,z,nx,ny,nz,r,g,b,t0,k){const l=Math.hypot(nx,ny,nz)||1;
-    P.x.push(x);P.y.push(y);P.z.push(z);P.nx.push(nx/l);P.ny.push(ny/l);P.nz.push(nz/l);P.r.push(r);P.g.push(g);P.b.push(b);P.t0.push(t0);P.k.push(k);P.ph.push(rnd()*6.28);}
-  const Y0=0.28,Y1=2.55,TAU=Math.PI*2;
-  const R=f=>1.08*Math.pow(1-f,1.05)+0.03;
-  // ground
-  for(let i=0;i<2600;i++){const rr=1.85*Math.sqrt(rnd()),a=rnd()*TAU;const c=0.75+rnd()*0.25;
-    add(rr*Math.cos(a),(rnd()-.5)*0.02,rr*Math.sin(a),0,1,0,c*0.92,c*0.96,c*1.05,0.1+rr/1.85*1.0,4);}
-  // trunk
-  for(let i=0;i<260;i++){const a=rnd()*TAU,y=rnd()*0.32;add(.13*Math.cos(a),y,.13*Math.sin(a),Math.cos(a),0,Math.sin(a),.42,.26,.13,1.1+y,0);}
-  // foliage (tiered, drooping)
-  const TIERS=9;
-  for(let i=0;i<7600;i++){const f=1-Math.sqrt(rnd());const y=Y0+(Y1-Y0)*f;const tf=(f*TIERS)%1;
-    let rad=R(f)*(1-0.3*tf);const s=Math.pow(rnd(),0.35);rad*=s;const a=rnd()*TAU;
-    const yy=y-0.06*(1-tf)*s;let cr=.10+rnd()*.10,cg=.38+rnd()*.25,cb=.16+rnd()*.08;
-    if(rnd()<0.12){cr=.30;cg=.68;cb=.32;}
-    if(s>0.93&&rnd()<0.07){cr=.86;cg=.9;cb=.95;}
-    add(rad*Math.cos(a),yy,rad*Math.sin(a),Math.cos(a),0.55,Math.sin(a),cr,cg,cb,1.4+f*3.6+rnd()*0.3,0);}
-  // garland spiral
-  for(let i=0;i<1000;i++){const u=i/1000;const f=0.04+0.88*u;const y=Y0+(Y1-Y0)*f;const a=TAU*3.6*u;const rad=R(f)*0.96+0.03;
-    add(rad*Math.cos(a),y-0.05*Math.abs(Math.sin(a*2.2)),rad*Math.sin(a),Math.cos(a),0.3,Math.sin(a),1,.76,.28,5.2+u*1.3,2);}
-  // ornaments
-  for(let o=0;o<34;o++){const f=0.05+rnd()*0.8,a=rnd()*TAU,y=Y0+(Y1-Y0)*f,rad=R(f)*0.93;
-    const cx=rad*Math.cos(a),cz=rad*Math.sin(a),pick=rnd();const col=pick<.6?[.88,.12,.13]:pick<.9?[.96,.7,.2]:[.8,.84,.9];
-    const t0=6.4+rnd()*1.2;
-    for(let j=0;j<46;j++){const u=rnd()*2-1,th=rnd()*TAU,q=Math.sqrt(1-u*u);const nx=q*Math.cos(th),ny=u,nz=q*Math.sin(th);
-      add(cx+nx*.075,y+ny*.075,cz+nz*.075,nx,ny,nz,col[0],col[1],col[2],t0,0);}}
-  // lights
-  for(let i=0;i<170;i++){const f=0.03+rnd()*0.9,a=rnd()*TAU,y=Y0+(Y1-Y0)*f,rad=R(f)*(0.9+rnd()*0.08);
-    const w=rnd();const c=w<.7?[1,.86,.5]:w<.85?[1,.45,.35]:[.55,.75,1];
-    add(rad*Math.cos(a),y,rad*Math.sin(a),Math.cos(a),0,Math.sin(a),c[0],c[1],c[2],6.8+rnd()*1.0,1);}
-  // gifts
-  const gifts=[[0.95,0.6,.34,.88,.14,.14],[-1.05,0.4,.3,.2,.32,.85],[0.2,-1.15,.26,.96,.72,.2],[-0.55,1.05,.36,.85,.12,.16],[1.25,-0.45,.22,.2,.32,.85]];
-  gifts.forEach((g,gi)=>{const [gx,gz,sz,r,gg,b]=g;const t0=7.6+gi*0.3;
-    for(let j=0;j<420;j++){const face=Math.floor(rnd()*5);let u=rnd()*2-1,v=rnd()*2-1;let x,y,z,n;
-      if(face===0){x=u;y=1;z=v;n=[0,1,0];}else if(face===1){x=1;y=v;z=u;n=[1,0,0];}else if(face===2){x=-1;y=v;z=u;n=[-1,0,0];}else if(face===3){x=u;y=v;z=1;n=[0,0,1];}else{x=u;y=v;z=-1;n=[0,0,-1];}
-      const rib=Math.abs(x)<.12||Math.abs(z)<.12;const c=rib?[1,.85,.45]:[r,gg,b];
-      add(gx+x*sz*.5,(y+1)*sz*.42,gz+z*sz*.5,n[0],n[1],n[2],c[0],c[1],c[2],t0,rib?2:0);}});
-  // star
-  for(let i=0;i<160;i++){const u=rnd()*2-1,th=rnd()*TAU,q=Math.sqrt(1-u*u),rr=0.06*Math.cbrt(rnd());
-    add(q*Math.cos(th)*rr*1.3,Y1+0.12+u*rr,q*Math.sin(th)*rr*1.3,0,0,1,1,.84,.3,8.6,3);}
-  const N=P.x.length;
-  const A={};for(const k in P)A[k]=Float32Array.from(P[k]);
-  const LIGHTS=P.k.filter(k=>k===1).length;
-
-  const RAMP=' .:-=+*#%@',SCR='01#%@*&$';
-  let W=0,H=0,dpr=1,fs=8,cw=5,ch=8,cols=0,rows=0,zb,ci,cr,cg,cbb,ck;
-  function resize(){const r=cv.getBoundingClientRect();if(!r.width)return;dpr=Math.min(2,window.devicePixelRatio||1);
-    W=r.width;H=r.height;cv.width=Math.round(W*dpr);cv.height=Math.round(H*dpr);
-    fs=Math.max(5.5,Math.min(9,W/68));cw=fs*0.6;ch=fs*1.02;cols=Math.floor(W/cw);rows=Math.floor(H/ch);
-    const n=cols*rows;zb=new Float32Array(n);ci=new Uint8Array(n);cr=new Uint8Array(n);cg=new Uint8Array(n);cbb=new Uint8Array(n);ck=new Uint8Array(n);}
-  const flakes=[];for(let i=0;i<110;i++)flakes.push({x:Math.random(),y:Math.random(),v:0.01+Math.random()*0.03,c:Math.random()<.2?'*':'.'});
-
-  let start=performance.now(),last=0;const LOOP=30;
-  function restart(){start=performance.now();}
-  $('#replay').onclick=restart;cv.addEventListener('click',restart);
-
-  const codeLines=[
-    ['c','# ascii_tree.py — point cloud → characters'],
-    ['k','def ','f','fib','','(n):'],['','    i = np.arange(n) + ','n','0.5'],['','    y = ','n','1',''," - 2 * i / n"],
-    ['','    th = np.pi * (','n','3',''," - np.sqrt(",'n','5','',')) * i'],
-    ['k','def ','f','envelope','','(y):'],['','    f = np.clip((y - Y0) / (Y1 - Y0), ','n','0',', ','n','1','',')'],
-    ['k','    return ','n','1.08','',' * (1 - f) ** ','n','1.05'],
-    ['c','# --- foliage: tiers of drooping branches'],['','tiers = np.linspace(Y0, Y1, ','n','9','',')'],
-    ['k','for ','','i, y ','k','in ','','enumerate(tiers):'],['','    R = envelope(y) * (1 - ','n','0.3','',' * tf)'],
-    ['c','# --- the tinsel garland: a gold spiral'],['','u = np.linspace(','n','0',', ','n','1',', ','n','1000','',')'],
-    ['','turns = ','n','3.6'],['','lum = ','n','0.25','',' + diffuse(n @ L)'],['','ch = RAMP[(lum * ','n','9.99','',').astype(int)]'],
-    ['','zbuf = np.maximum.at(zbuf, idx, 1 / depth)'],['','render(grid, colors)']];
-  const esc=s=>s.replace(/&/g,'&amp;').replace(/</g,'&lt;');
-  function lineHTML(parts,limit){let out='',n=0;for(let i=0;i<parts.length;i+=2){const cls=parts[i],txt=parts[i+1]||'';
-    if(n>=limit)break;const t=txt.slice(0,limit-n);n+=t.length;out+=cls?`<span class="${cls}">${esc(t)}</span>`:esc(t);}return out;}
-  const lineLen=parts=>{let n=0;for(let i=1;i<parts.length;i+=2)n+=(parts[i]||'').length;return n;};
-  const codeEl=$('#code');let lastCode='';
-  function drawCode(t){let budget=Math.floor(t*38);const shown=[];
-    for(const ln of codeLines){const len=lineLen(ln);if(budget<=0)break;shown.push(lineHTML(ln,budget));budget-=len+4;}
-    const html=shown.slice(-4).join('\n');if(html!==lastCode){codeEl.innerHTML=html;lastCode=html;}}
-
-  const Lx=-0.45,Ly=0.62,Lz=0.64;
-  function frame(now){
-    requestAnimationFrame(frame);
-    if(now-last<33)return;last=now;
-    if(!cols){resize();if(!cols)return;}
-    let t=(now-start)/1000; if(reduce&&t<10)t=10+t; if(t>LOOP){restart();t=0;}
-    const fade=t>LOOP-2?Math.max(0,(LOOP-t)/2):1;
-    const ang=t*0.32, ca=Math.cos(ang), sa=Math.sin(ang), pitch=0.3, cp=Math.cos(pitch), sp=Math.sin(pitch);
-    const D=6.2, F=0.70*H*D/3.3, cx=W/2, cy=H*0.38;
-    zb.fill(0);ck.fill(0);
-    let starX=-1,starY=-1;
-    for(let i=0;i<N;i++){
-      const t0=A.t0[i]; if(t<t0)continue;
-      const x=A.x[i],y=A.y[i]-1.25,z=A.z[i];
-      const xr=x*ca+z*sa, zr=-x*sa+z*ca;
-      const y2=y*cp-zr*sp, z2=y*sp+zr*cp;
-      const depth=D-z2; const inv=1/depth;
-      const sx=cx+xr*F*inv, sy=cy-y2*F*inv;
-      const c=(sx/cw)|0, r=(sy/ch)|0; if(c<0||r<0||c>=cols||r>=rows)continue;
-      const id=r*cols+c; if(inv<=zb[id])continue;
-      zb[id]=inv;
-      const k=A.k[i]; let lum;
-      if(k===0){const nx=A.nx[i]*ca+A.nz[i]*sa, nz=-A.nx[i]*sa+A.nz[i]*ca; const d=nx*Lx+A.ny[i]*Ly+nz*Lz; lum=0.22+0.85*Math.max(0,d);}
-      else if(k===1){lum=0.55+0.45*Math.sin(t*3.1+A.ph[i]);}
-      else if(k===2){const nx=A.nx[i]*ca+A.nz[i]*sa, nz=-A.nx[i]*sa+A.nz[i]*ca; lum=0.5+0.5*Math.max(0,nx*Lx+A.ny[i]*Ly+nz*Lz)+0.15*Math.sin(t*5+A.ph[i]);}
-      else if(k===4){lum=0.28+0.3*((A.ph[i]*1.7)%1);}
-      else {lum=1; starX=sx; starY=sy;}
-      lum=Math.min(1,Math.max(0,lum));
-      const age=t-t0;
-      if(age<0.35&&k!==3){ci[id]=200+((i+((t*20)|0))%SCR.length);cr[id]=230;cg[id]=240;cbb[id]=255;ck[id]=6;}
-      else{ci[id]=Math.min(9,Math.max(1,(lum*9.99)|0));const m=(0.35+0.8*lum)*255*fade;
-        cr[id]=Math.min(255,A.r[i]*m);cg[id]=Math.min(255,A.g[i]*m);cbb[id]=Math.min(255,A.b[i]*m);ck[id]=k+1;}
-    }
-    ctx.setTransform(dpr,0,0,dpr,0,0);
-    ctx.fillStyle='#070a12';ctx.fillRect(0,0,W,H);
-    ctx.font=`${fs}px "JetBrains Mono",ui-monospace,Menlo,monospace`;ctx.textBaseline='top';
-    // snow
-    ctx.fillStyle='rgba(200,210,230,0.55)';
-    for(const f of flakes){if(!reduce){f.y+=f.v*0.033;f.x+=Math.sin(t+f.v*90)*0.0004;if(f.y>1){f.y=0;f.x=Math.random();}}
-      ctx.fillText(f.c,f.x*W,f.y*H*0.78);}
-    let chars=0;
-    const glow=[];
-    for(let r=0;r<rows;r++)for(let c=0;c<cols;c++){const id=r*cols+c;if(!ck[id])continue;chars++;
-      const ch_=ci[id]>=200?SCR[ci[id]-200]:RAMP[ci[id]];
-      ctx.fillStyle=`rgb(${cr[id]},${cg[id]},${cbb[id]})`;ctx.fillText(ch_,c*cw,r*ch);
-      if(ck[id]===2||ck[id]===4)glow.push(id);}
-    // glow pass for lights and star
-    ctx.shadowBlur=8;
-    for(const id of glow){const c=id%cols,r=(id/cols)|0;ctx.shadowColor=`rgb(${cr[id]},${cg[id]},${cbb[id]})`;ctx.fillStyle=ctx.shadowColor;ctx.fillText(RAMP[ci[id]]||'*',c*cw,r*ch);}
-    // star rays
-    if(starX>0){ctx.shadowColor='rgba(242,193,78,.9)';ctx.fillStyle=`rgba(242,193,78,${0.75*fade})`;
-      const rays=[[0,-1,'|'],[0,1,'|'],[1,0,'-'],[-1,0,'-'],[.7,-.7,'/'],[-.7,-.7,'\\'],[.7,.7,'\\'],[-.7,.7,'/']];
-      const pulse=0.5+0.5*Math.sin(t*2);
-      ctx.shadowBlur=4;
-      for(const [dx,dy,g] of rays){const len=(dy<0?7:4)+pulse*2;for(let s=2;s<len;s++){
-        ctx.fillStyle=`rgba(242,200,90,${(1-s/len)*0.7*fade})`;ctx.fillText(g,starX+dx*s*cw*1.1-cw*.3,starY+dy*s*ch*0.9-ch*.5);}}}
-    ctx.shadowBlur=0;
-    // HUD
-    $('#hRot').textContent=((ang*180/Math.PI)%360).toFixed(2)+'°';
-    $('#hChars').textContent=chars.toLocaleString('en-US');
-    $('#hLights').textContent=t>6.8?Math.min(LIGHTS,Math.floor((t-6.8)/1.0*LIGHTS)):0;
-    $('#tTag').textContent='t '+t.toFixed(1)+'s';
-    drawCode(t);
-  }
-  new ResizeObserver(resize).observe(cv);
-  requestAnimationFrame(frame);
-})();
 </script>
 
 </body>
