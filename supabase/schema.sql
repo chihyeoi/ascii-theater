@@ -12,6 +12,8 @@ create table if not exists public.shows (
   html        text not null check (char_length(html) between 20 and 230000),
   created_at  timestamptz not null default now()
 );
+-- 미리보기 사진 (작은 JPEG, 올릴 때 사이트가 자동으로 찍음)
+alter table public.shows add column if not exists thumb text not null default '' check (char_length(thumb) <= 300000);
 create index if not exists shows_created_at_idx on public.shows (created_at desc);
 
 -- 2) 관리자 목록 (여기 있는 사람은 남의 상영작도 내릴 수 있음)
