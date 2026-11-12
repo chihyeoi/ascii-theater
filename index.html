@@ -119,6 +119,11 @@ textarea{min-height:84px}
 .save-tools button{border:1px solid var(--line);background:transparent;border-radius:7px;padding:5px 10px;font-size:12.5px}
 .save-tools button:hover{border-color:var(--mute)}
 .save-tools button:disabled{opacity:.5;cursor:wait}
+.save-tools [hidden]{display:none!important}
+.vid-grp{display:inline-flex;align-items:stretch}
+.vid-grp button{border-top-right-radius:0!important;border-bottom-right-radius:0!important}
+.vid-grp select{border:1px solid var(--line);border-left:0;background:transparent;color:inherit;border-radius:0 7px 7px 0;padding:0 6px;font:inherit;font-size:12.5px;cursor:pointer}
+.vid-grp select option{background:var(--bg,#0a0e18);color:#e7ebf3}
 .save-ready{display:flex;align-items:center;gap:8px;flex-wrap:wrap;background:var(--panel);border:1px solid var(--gold);border-radius:10px;padding:10px 12px}
 .save-ready span{font-size:13.5px;flex:1 1 140px;min-width:0}
 .stage iframe{touch-action:manipulation}
@@ -220,6 +225,7 @@ footer{padding-block:32px 48px;border-top:1px solid var(--line);color:var(--mute
   .stage{max-height:58vh}
   .stage.tall{aspect-ratio:4/5}
   .stage-tools button,.save-tools button{padding:9px 12px;font-size:13.5px}
+  .vid-grp select{font-size:13.5px;padding:0 8px}
   .show .acts button,.reel .acts button{padding:9px 12px;font-size:13.5px}
   #theater .show .acts button{padding:7px 10px;font-size:12.5px}
   #theater .show p{display:none}
@@ -284,9 +290,9 @@ footer{padding-block:32px 48px;border-top:1px solid var(--line);color:var(--mute
         <div class="save-tools" role="group" aria-label="지금 상영 중인 작품 저장">
           <span class="lbl-s">저장</span>
           <button type="button" id="savePng">사진 (PNG)</button>
-          <button type="button" id="saveVid">영상 (6초)</button>
+          <span class="vid-grp"><button type="button" id="saveVid">영상</button><select id="vidLen" aria-label="영상 길이"><option value="6" selected>6초</option><option value="10">10초</option><option value="15">15초</option><option value="20">20초</option><option value="30">30초</option></select></span>
           <button type="button" id="saveHtml">HTML 파일</button>
-          <button type="button" id="heroCopy" class="ghost">트리 프롬프트 복사</button>
+          <button type="button" id="heroCopy" class="ghost" hidden>프롬프트 복사</button>
         </div>
         <div class="save-ready" id="saveReady" hidden>
           <span id="saveMsg">준비됐어요</span>
@@ -832,7 +838,7 @@ if('IntersectionObserver' in window){
   const bar=$('#mcopy');
   new IntersectionObserver(es=>{es.forEach(e=>{const on=e.isIntersecting;bar.classList.toggle('on',on);bar.setAttribute('aria-hidden',!on);$('#mcopyBtn').tabIndex=on?0:-1;});},{threshold:0.15}).observe($('#form'));
 }
-$('#heroCopy').onclick=()=>copyText(buildPrompt(presetSettings(PRESETS[0])));
+$('#heroCopy').onclick=()=>{if(current&&current.prompt)copyText(current.prompt);};
 $('#form').addEventListener('input',render);
 $('#form').addEventListener('change',render);
 $('#form').addEventListener('submit',e=>e.preventDefault());
@@ -878,7 +884,7 @@ var ty=(au?['video/mp4;codecs=avc1,mp4a.40.2','video/mp4;codecs=avc1.42E01E,mp4a
 var r;try{r=new MediaRecorder(st,ty?{mimeType:ty,videoBitsPerSecond:8000000,audioBitsPerSecond:160000}:undefined);}catch(err){send({asciiRes:'rec',req:d.req,error:'unsupported'});return;}
 var ch=[];r.ondataavailable=function(ev){if(ev.data&&ev.data.size)ch.push(ev.data);};
 r.onstop=function(){send({asciiRes:'rec',req:d.req,audio:!!au,blob:new Blob(ch,{type:r.mimeType||ty||'video/webm'})});};
-r.start(250);setTimeout(function(){try{r.stop();}catch(err){}},(d.seconds||6)*1000);}
+r.start(250);setTimeout(function(){try{r.stop();}catch(err){}},Math.min(30,Math.max(1,d.seconds||6))*1000);}
 });})();`;
   function withBeacon(html,id){
     const tag=`<script>try{parent.postMessage({asciiTheater:${id}},"*")}catch(e){}${HELPER}<\/script>`;
@@ -887,15 +893,15 @@ r.start(250);setTimeout(function(){try{r.stop();}catch(err){}},(d.seconds||6)*10
     return tag+html;
   }
   window.addEventListener('message',e=>{if(e.source===runner.contentWindow&&e.data&&e.data.asciiTheater===runId){aliveId=runId;clearTimeout(aliveTimer);blocked.hidden=true;}});
-  function play(html,title){
-    current={html,title};runId++;blocked.hidden=true;clearTimeout(aliveTimer);const sr=document.getElementById('saveReady');if(sr)sr.hidden=true;
+  function play(html,title,prompt){
+    prompt=(prompt||'').trim();current={html,title,prompt};const hc=$('#heroCopy');if(hc)hc.hidden=!prompt;runId++;blocked.hidden=true;clearTimeout(aliveTimer);const sr=document.getElementById('saveReady');if(sr)sr.hidden=true;
     runner.srcdoc=withBeacon(html,runId);
     $('#nowPlaying').innerHTML='';const s=document.createElement('span');s.textContent='상영 중: ';const b=document.createElement('b');b.textContent=title;$('#nowPlaying').append(s,b);
   }
   runner.addEventListener('load',()=>{const id=runId;clearTimeout(aliveTimer);if(aliveId===id)return;aliveTimer=setTimeout(()=>{if(id===runId&&aliveId!==id)blocked.hidden=false;},3000);});
   $('#runBtn').onclick=()=>{const h=extractHTML($('#htmlIn').value);if(!h){toast('먼저 HTML 코드를 붙여넣어 주세요');return;}
     $('#htmlIn').value=h;updateSize();play(h,'붙여넣은 코드');document.getElementById('theater').scrollIntoView({behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth'});};
-  $('#reRun').onclick=()=>play(current.html,current.title);
+  $('#reRun').onclick=()=>play(current.html,current.title,current.prompt);
   $('#blockedCopy').onclick=()=>copyText(current.html);
   function setRatio(tall){stageBox.classList.toggle('tall',tall);$('#ratioTall').setAttribute('aria-pressed',tall);$('#ratioWide').setAttribute('aria-pressed',!tall);}
   $('#ratioWide').onclick=()=>setRatio(false);$('#ratioTall').onclick=()=>setRatio(true);
@@ -916,10 +922,10 @@ r.start(250);setTimeout(function(){try{r.stop();}catch(err){}},(d.seconds||6)*10
   $('#savePng').onclick=async()=>{const b=$('#savePng');b.disabled=true;b.textContent='찍는 중…';
     const r=await ask('snap',{},6000);b.disabled=false;b.textContent='사진 (PNG)';
     if(r.blob)offer(r.blob,fname('png'),'지금 화면을 사진으로 찍었어요');else toast('이 작품은 사진으로 찍을 수 없어요');};
-  $('#saveVid').onclick=async()=>{const b=$('#saveVid');const S=6;b.disabled=true;let left=S;b.textContent=`녹화 중 ${left}…`;
+  $('#saveVid').onclick=async()=>{const b=$('#saveVid'),sel=$('#vidLen');const S=Math.min(30,Math.max(6,parseInt(sel.value,10)||6));b.disabled=true;sel.disabled=true;let left=S;b.textContent=`녹화 중 ${left}…`;
     const tick=setInterval(()=>{left=Math.max(0,left-1);b.textContent=left?`녹화 중 ${left}…`:'만드는 중…';},1000);
-    const r=await ask('rec',{seconds:S},S*1000+8000);clearInterval(tick);b.disabled=false;b.textContent='영상 (6초)';
-    if(r.blob&&r.blob.size){const ext=/mp4/.test(r.blob.type)?'mp4':'webm';offer(r.blob,fname(ext),r.audio?`6초 영상을 소리와 함께 녹화했어요 (${ext.toUpperCase()})`:`6초 영상을 녹화했어요 (${ext.toUpperCase()}). 소리가 있는 작품이면 화면을 한 번 눌러 소리를 켠 뒤 다시 녹화해 주세요`);}
+    const r=await ask('rec',{seconds:S},S*1000+8000);clearInterval(tick);b.disabled=false;sel.disabled=false;b.textContent='영상';
+    if(r.blob&&r.blob.size){const ext=/mp4/.test(r.blob.type)?'mp4':'webm';offer(r.blob,fname(ext),r.audio?`${S}초 영상을 소리와 함께 녹화했어요 (${ext.toUpperCase()})`:`${S}초 영상을 녹화했어요 (${ext.toUpperCase()}). 소리가 있는 작품이면 화면을 한 번 눌러 소리를 켠 뒤 다시 녹화해 주세요`);}
     else if(r.error==='nocanvas')toast('이 작품은 canvas로 그려지지 않아 영상 녹화가 안 돼요. 사진이나 HTML로 저장해 주세요');
     else toast('이 브라우저에서는 영상 녹화가 안 돼요. 사진이나 HTML로 저장해 주세요');};
   $('#saveHtml').onclick=()=>{offer(new Blob([current.html],{type:'text/html'}),fname('html'),'HTML 파일을 준비했어요. 열면 어디서든 재생돼요');};
@@ -938,7 +944,7 @@ r.start(250);setTimeout(function(){try{r.stop();}catch(err){}},(d.seconds||6)*10
   function updateSize(){const n=$('#htmlIn').value.length;$('#sizeHint').textContent=n?`${(n/1000).toFixed(1)}천 자${n>MAX?' · 너무 길어서 올릴 수는 없어요':''}`:'';}
   $('#htmlIn').addEventListener('input',updateSize);
   setRatio(matchMedia('(max-width:700px)').matches);
-  play(SAMPLE,'예시 · 크리스마스 트리');
+  play(SAMPLE,'예시 · 크리스마스 트리',buildPrompt(presetSettings(PRESETS[0])));
   try{const n=localStorage.getItem('asciiNick');if(n)$('#pnick').value=n;}catch(e){}
 
   /* shared list (Supabase) */
@@ -960,7 +966,7 @@ r.start(250);setTimeout(function(){try{r.stop();}catch(err){}},(d.seconds||6)*10
   }
 
   const mobile=()=>matchMedia('(max-width:900px)').matches;
-  async function playItem(it){try{const html=await getHTML(it);playingId=it.id;play(html,it.title||'상영작');render();
+  async function playItem(it){try{const html=await getHTML(it);playingId=it.id;play(html,it.title||'상영작',it.prompt);render();
     if(mobile())document.getElementById('theater').scrollIntoView({behavior:smooth()});
     const uid=session&&session.user.id;
     if(!it.thumb&&hasThumb&&uid&&(it.user_id===uid||isAdmin)){const id=it.id;setTimeout(()=>backfillThumb(it,id),4500);}
@@ -1044,7 +1050,7 @@ r.start(250);setTimeout(function(){try{r.stop();}catch(err){}},(d.seconds||6)*10
     if(data&&row.thumb)data.thumb=row.thumb;
     $('#psend').disabled=false;
     if(error){setStatus(/하루에/.test(error.message)?'오늘은 더 올릴 수 없어요. 하루에 20편까지 올릴 수 있어요.':'올리지 못했어요. 잠시 뒤 다시 시도해 주세요.',true);return;}
-    data.html=html;items.unshift(data);playingId=data.id;render();play(html,title);document.getElementById('theater').scrollIntoView({behavior:smooth()});
+    data.html=html;items.unshift(data);playingId=data.id;render();play(html,title,data.prompt||row.prompt);document.getElementById('theater').scrollIntoView({behavior:smooth()});
     ['#psubject','#pnote','#pprompt'].forEach(s=>$(s).value='');setStatus('');toast('상영작을 올렸어요');
   });
 
