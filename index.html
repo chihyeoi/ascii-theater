@@ -116,6 +116,14 @@ textarea{min-height:84px}
 .theater{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,.9fr);gap:28px;align-items:start}
 .stage-col{display:flex;flex-direction:column;gap:10px;min-width:0}
 .stage-bar{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}
+.save-tools{display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+.save-tools .lbl-s{font-family:var(--f-mono);font-size:12px;color:var(--mute);margin-right:2px}
+.save-tools button{border:1px solid var(--line);background:transparent;border-radius:7px;padding:5px 10px;font-size:12.5px}
+.save-tools button:hover{border-color:var(--mute)}
+.save-tools button:disabled{opacity:.5;cursor:wait}
+.save-ready{display:flex;align-items:center;gap:8px;flex-wrap:wrap;background:var(--panel);border:1px solid var(--gold);border-radius:10px;padding:10px 12px}
+.save-ready span{font-size:13.5px;flex:1 1 140px;min-width:0}
+.stage iframe{touch-action:manipulation}
 .stage-bar .now{font-family:var(--f-mono);font-size:12.5px;color:var(--mute);min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .stage-bar .now b{color:var(--ink);font-weight:600}
 .stage-tools{display:flex;gap:6px;flex-wrap:wrap}
@@ -202,7 +210,7 @@ footer{padding-block:32px 48px;border-top:1px solid var(--line);color:var(--mute
   .chip{padding:7px 13px}
   .out pre{max-height:360px;font-size:12px}
   .stage{max-height:75vh}
-  .stage-tools button{padding:8px 12px;font-size:13px}
+  .stage-tools button,.save-tools button{padding:9px 12px;font-size:13.5px}
   .show .acts button,.reel .acts button{padding:9px 12px;font-size:13.5px}
   .btn-s{padding:11px 16px}
   .shows,.reels{grid-template-columns:1fr}
@@ -350,6 +358,17 @@ footer{padding-block:32px 48px;border-top:1px solid var(--line);color:var(--mute
             <button type="button" id="reRun">↻ 다시</button>
             <button type="button" id="fullBtn">전체 화면</button>
           </div>
+        </div>
+        <div class="save-tools" role="group" aria-label="지금 상영 중인 작품 저장">
+          <span class="lbl-s">저장</span>
+          <button type="button" id="savePng">사진 (PNG)</button>
+          <button type="button" id="saveVid">영상 (6초)</button>
+          <button type="button" id="saveHtml">HTML 파일</button>
+        </div>
+        <div class="save-ready" id="saveReady" hidden>
+          <span id="saveMsg">준비됐어요</span>
+          <button type="button" class="btn-s gold" id="saveGo">저장하기</button>
+          <button type="button" class="btn-s" id="saveX" aria-label="닫기">닫기</button>
         </div>
         <div class="stage" id="stageBox">
           <iframe id="runner" title="상영 화면" sandbox="allow-scripts"></iframe>
@@ -499,7 +518,7 @@ function buildPrompt(s){
   }else{
     L.push('- 브라우저에서 바로 열리는 HTML 파일 하나. CSS와 JS를 전부 파일 안에 넣고 외부 라이브러리, 이미지, 폰트 링크는 쓰지 않는다.');
     L.push('- 그림은 오직 고정폭 글자 격자로만 그린다. 도형, 이미지, 그라데이션으로 그림을 대신하면 안 된다(배경색은 예외).');
-    L.push('- 성능을 위해 <canvas>에 fillText로 글자를 찍는다.');
+    L.push('- 장면, 배경, 정보창, 코드 패널까지 전부 화면을 꽉 채우는 <canvas> 하나에 fillText로 그린다. 배경색도 canvas에 직접 칠한다. (이 canvas를 그대로 사진·영상으로 저장할 수 있게)');
   }
   L.push('');
   L.push('## 그리는 방법');
@@ -517,11 +536,22 @@ function buildPrompt(s){
   if(rotate) fx.push('- 세로축 기준으로 약 20초에 한 바퀴씩 천천히 회전한다. 카메라는 살짝 위에서 내려다보는 각도.');
   if(still) fx.push('- 회전하지 않는 정지 장면. 주제가 가장 잘 보이는 카메라 각도를 골라 고정한다.');
   if(s.bg) fx.push(`- 배경에 아주 작은 별·눈 글자(. * ·)가 ${still?'은은하게 반짝인다':'천천히 떨어지거나 반짝인다'}. 주제를 가리지 않게 흐리게.`);
-  if(s.hud) fx.push('- 화면 하단에 작은 회색 고정폭 글씨로 정보창: rotation(각도), characters(그려진 글자 수), lights(빛나는 점 수), t(경과 초).');
-  if(s.code) fx.push('- 화면 맨 아래에 이 장면을 만드는 코드 일부가 타자 치듯 한 줄씩 흘러가는 패널. 작고 흐리게, 장면을 가리지 않게.');
-  if(s.build && !py) fx.push('- 화면을 클릭(탭)하면 처음부터 다시 조립한다.');
+  if(s.hud) fx.push('- 화면 하단(같은 canvas 안)에 작은 회색 고정폭 글씨로 정보창: rotation(각도), characters(그려진 글자 수), lights(빛나는 점 수), t(경과 초).');
+  if(s.code) fx.push('- 화면 맨 아래(같은 canvas 안)에 이 장면을 만드는 코드 일부가 타자 치듯 한 줄씩 흘러가는 패널. 작고 흐리게, 장면을 가리지 않게.');
+  if(s.build && !py) fx.push('- 화면을 짧게 탭(클릭)하면 처음부터 다시 조립한다.');
+  if(rotate && !py) fx.push('- 화면을 손가락(마우스)으로 좌우로 끌면 그 방향으로 돌려 볼 수 있고, 손을 떼면 다시 천천히 자동 회전한다. 짧은 탭과 끌기를 구분한다(움직임 8px 이상이면 끌기).');
   if(s.build && py) fx.push('- 한 바퀴 다 보여 주면 다시 처음부터 조립하며 무한 반복.');
   if(fx.length){ L.push('## 연출'); L.push(...fx); L.push(''); }
+  if(!py){
+    L.push('## 휴대폰에서도 완벽하게');
+    L.push('- <head>에 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"> 를 넣는다.');
+    L.push('- 화면 크기는 window.innerWidth/innerHeight 기준으로 잡고, resize와 화면 회전 때 격자와 canvas 크기를 다시 계산한다. devicePixelRatio(최대 2)를 반영해 글자가 선명하게.');
+    L.push('- 입력은 pointer 이벤트(pointerdown/pointermove/pointerup)로 통일해서 마우스와 터치 모두 똑같이 동작한다. 마우스 올리기(hover)에만 반응하는 기능은 만들지 않는다.');
+    L.push('- canvas에 touch-action:none, 페이지에 overflow:hidden, user-select:none, -webkit-tap-highlight-color:transparent 를 줘서 끌 때 화면이 스크롤되거나 확대되거나 파랗게 선택되지 않게 한다.');
+    L.push('- 휴대폰 성능 배려: 처음 1~2초 동안 평균 fps를 재서 30fps보다 낮으면 점 개수와 글자 칸 수를 자동으로 줄인다. 화면이 가려지면(visibilitychange) 애니메이션을 멈추고 돌아오면 이어서.');
+    L.push('- 소리는 넣지 않는다. 외부 파일, 폰트, 이미지를 불러오지 않는다.');
+    L.push('');
+  }
   L.push('## 품질 기준');
   L.push('- 실루엣만 봐도 주제를 바로 알아볼 수 있어야 한다. 주제의 특징 3가지를 먼저 정하고, 그 부분에 점을 더 많이 배치한다.');
   L.push('- 단색 덩어리처럼 보이지 않게 부위마다 글자 밀도와 색을 다르게 준다.');
@@ -547,6 +577,13 @@ const CONVERT_PROMPT=`너는 ASCII 아트 변환기 개발자야. 내가 가진 
 4. 조절 패널: 가로 글자 수 슬라이더(40~240), 대비, 밝기, 밝기 반전 토글, 색감 선택(컬러 / 흑백 / 초록 터미널), 문자 램프 직접 입력.
 5. 동영상은 재생/일시정지, 반복 재생, 진행 막대.
 6. 결과는 <canvas>에 fillText로 그려 화면 크기에 맞춘다. 현재 화면을 텍스트로 복사하는 버튼과 PNG로 저장하는 버튼.
+
+## 휴대폰에서도 완벽하게
+- <head>에 viewport 메타 태그(width=device-width, initial-scale=1)를 넣는다.
+- 파일 선택은 휴대폰 사진 보관함에서도 고를 수 있게 <input type="file" accept="image/*,video/*">로 만든다. 드래그 앤 드롭은 PC에서만 추가 기능으로.
+- 슬라이더와 버튼은 손가락으로 누르기 좋게 높이 44px 이상. 마우스 올리기(hover)에만 반응하는 기능은 만들지 않는다.
+- 휴대폰 동영상은 playsinline, muted 로 재생해서 전체 화면으로 튀어나가지 않게 한다.
+- 결과 canvas는 화면 너비에 맞추고 devicePixelRatio(최대 2)를 반영해 선명하게. 화면 회전 때 다시 계산.
 
 ## 디자인
 - 아주 어두운 남색 배경, 고정폭 글꼴. 조절 패널은 한쪽에 작게, 휴대폰에서는 아래로 내려간다.
@@ -653,15 +690,31 @@ requestAnimationFrame(f);}f();<\/script></body></html>`;
     if(en>0)t=t.slice(0,en+7);
     return t;
   }
+  /* runs inside the player: answers "snap" (PNG) and "rec" (video) requests from this page */
+  const HELPER=`;(function(){
+function big(){var b=null,a=0;[].slice.call(document.querySelectorAll('canvas')).forEach(function(c){var r=c.getBoundingClientRect(),s=r.width*r.height;if(s>a&&c.width>0){a=s;b=c;}});return b;}
+function bg(el){var c=getComputedStyle(el).backgroundColor;if(!c||c==='transparent'||c==='rgba(0, 0, 0, 0)'){c=getComputedStyle(document.body).backgroundColor;}if(!c||c==='rgba(0, 0, 0, 0)'){c=getComputedStyle(document.documentElement).backgroundColor;}return (!c||c==='rgba(0, 0, 0, 0)')?'#000':c;}
+function flat(c){var o=document.createElement('canvas');o.width=c.width;o.height=c.height;var x=o.getContext('2d');x.fillStyle=bg(c);x.fillRect(0,0,o.width,o.height);x.drawImage(c,0,0);return o;}
+function textShot(){var el=document.querySelector('pre')||document.body;var t=(el.innerText||'').replace(/\\s+$/,'');var L=t.split('\\n');var fs=14,w=0;L.forEach(function(l){w=Math.max(w,l.length);});var o=document.createElement('canvas');o.width=Math.min(4000,Math.max(200,Math.ceil(w*fs*0.62)+40));o.height=Math.min(4000,L.length*fs+40);var x=o.getContext('2d');x.fillStyle=bg(el);x.fillRect(0,0,o.width,o.height);x.fillStyle=getComputedStyle(el).color||'#ddd';x.font=fs+'px monospace';x.textBaseline='top';L.forEach(function(l,i){x.fillText(l,20,20+i*fs);});return o;}
+function send(m){parent.postMessage(m,'*');}
+addEventListener('message',function(e){var d=e.data||{};if(!d.asciiCmd)return;var c=big();
+if(d.asciiCmd==='snap'){var s=c?flat(c):textShot();s.toBlob(function(b){send({asciiRes:'snap',req:d.req,blob:b});},'image/png');}
+if(d.asciiCmd==='rec'){if(!c||!c.captureStream||!window.MediaRecorder){send({asciiRes:'rec',req:d.req,error:c?'unsupported':'nocanvas'});return;}
+var st=c.captureStream(30),ty=['video/mp4;codecs=avc1','video/mp4','video/webm;codecs=vp9','video/webm'].filter(function(t){return MediaRecorder.isTypeSupported(t);})[0]||'';
+var r;try{r=new MediaRecorder(st,ty?{mimeType:ty,videoBitsPerSecond:8000000}:undefined);}catch(err){send({asciiRes:'rec',req:d.req,error:'unsupported'});return;}
+var ch=[];r.ondataavailable=function(ev){if(ev.data&&ev.data.size)ch.push(ev.data);};
+r.onstop=function(){send({asciiRes:'rec',req:d.req,blob:new Blob(ch,{type:r.mimeType||ty||'video/webm'})});};
+r.start(250);setTimeout(function(){try{r.stop();}catch(err){}},(d.seconds||6)*1000);}
+});})();`;
   function withBeacon(html,id){
-    const tag=`<script>try{parent.postMessage({asciiTheater:${id}},"*")}catch(e){}<\/script>`;
+    const tag=`<script>try{parent.postMessage({asciiTheater:${id}},"*")}catch(e){}${HELPER}<\/script>`;
     if(/<head[^>]*>/i.test(html))return html.replace(/<head[^>]*>/i,m=>m+tag);
     if(/<html[^>]*>/i.test(html))return html.replace(/<html[^>]*>/i,m=>m+tag);
     return tag+html;
   }
   window.addEventListener('message',e=>{if(e.source===runner.contentWindow&&e.data&&e.data.asciiTheater===runId){aliveId=runId;clearTimeout(aliveTimer);blocked.hidden=true;}});
   function play(html,title){
-    current={html,title};runId++;blocked.hidden=true;clearTimeout(aliveTimer);
+    current={html,title};runId++;blocked.hidden=true;clearTimeout(aliveTimer);const sr=document.getElementById('saveReady');if(sr)sr.hidden=true;
     runner.srcdoc=withBeacon(html,runId);
     $('#nowPlaying').innerHTML='';const s=document.createElement('span');s.textContent='상영 중: ';const b=document.createElement('b');b.textContent=title;$('#nowPlaying').append(s,b);
   }
@@ -672,6 +725,30 @@ requestAnimationFrame(f);}f();<\/script></body></html>`;
   $('#blockedCopy').onclick=()=>copyText(current.html);
   function setRatio(tall){stageBox.classList.toggle('tall',tall);$('#ratioTall').setAttribute('aria-pressed',tall);$('#ratioWide').setAttribute('aria-pressed',!tall);}
   $('#ratioWide').onclick=()=>setRatio(false);$('#ratioTall').onclick=()=>setRatio(true);
+  /* ---- save: PNG / video / HTML of whatever is playing ---- */
+  let reqN=0;const pending={};let ready=null;
+  window.addEventListener('message',e=>{const d=e.data;if(e.source!==runner.contentWindow||!d||!d.asciiRes)return;const p=pending[d.req];if(p){delete pending[d.req];p(d);}});
+  function ask(cmd,extra,wait){return new Promise(res=>{const req=++reqN;pending[req]=res;try{runner.contentWindow.postMessage(Object.assign({asciiCmd:cmd,req},extra||{}),'*');}catch(e){}
+    setTimeout(()=>{if(pending[req]){delete pending[req];res({error:'timeout'});}},wait);});}
+  const fname=ext=>{const d=new Date(),z=n=>String(n).padStart(2,'0');return `ascii-${d.getFullYear()}${z(d.getMonth()+1)}${z(d.getDate())}-${z(d.getHours())}${z(d.getMinutes())}${z(d.getSeconds())}.${ext}`;};
+  function offer(blob,name,msg){ready={blob,name};$('#saveMsg').textContent=msg;$('#saveReady').hidden=false;$('#saveGo').focus({preventScroll:true});}
+  async function saveNow(){if(!ready)return;const {blob,name}=ready;
+    const file=new File([blob],name,{type:blob.type});
+    const touch=matchMedia('(pointer:coarse)').matches;
+    if(touch&&navigator.canShare&&navigator.canShare({files:[file]})){try{await navigator.share({files:[file],title:name});$('#saveReady').hidden=true;return;}catch(e){if(e&&e.name==='AbortError')return;}}
+    const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download=name;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),60000);
+    $('#saveReady').hidden=true;toast('저장했어요');}
+  $('#saveGo').onclick=saveNow;$('#saveX').onclick=()=>{$('#saveReady').hidden=true;ready=null;};
+  $('#savePng').onclick=async()=>{const b=$('#savePng');b.disabled=true;b.textContent='찍는 중…';
+    const r=await ask('snap',{},6000);b.disabled=false;b.textContent='사진 (PNG)';
+    if(r.blob)offer(r.blob,fname('png'),'지금 화면을 사진으로 찍었어요');else toast('이 작품은 사진으로 찍을 수 없어요');};
+  $('#saveVid').onclick=async()=>{const b=$('#saveVid');const S=6;b.disabled=true;let left=S;b.textContent=`녹화 중 ${left}…`;
+    const tick=setInterval(()=>{left=Math.max(0,left-1);b.textContent=left?`녹화 중 ${left}…`:'만드는 중…';},1000);
+    const r=await ask('rec',{seconds:S},S*1000+8000);clearInterval(tick);b.disabled=false;b.textContent='영상 (6초)';
+    if(r.blob&&r.blob.size){const ext=/mp4/.test(r.blob.type)?'mp4':'webm';offer(r.blob,fname(ext),`6초 영상을 녹화했어요 (${ext.toUpperCase()})`);}
+    else if(r.error==='nocanvas')toast('이 작품은 canvas로 그려지지 않아 영상 녹화가 안 돼요. 사진이나 HTML로 저장해 주세요');
+    else toast('이 브라우저에서는 영상 녹화가 안 돼요. 사진이나 HTML로 저장해 주세요');};
+  $('#saveHtml').onclick=()=>{offer(new Blob([current.html],{type:'text/html'}),fname('html'),'HTML 파일을 준비했어요. 열면 어디서든 재생돼요');};
   $('#fullBtn').onclick=()=>{try{const r=stageBox.requestFullscreen&&stageBox.requestFullscreen();if(r&&r.catch)r.catch(()=>toast('이 화면에서는 전체 화면을 쓸 수 없어요'));}catch(e){toast('이 화면에서는 전체 화면을 쓸 수 없어요');}};
   const MAX=230000;
   function updateSize(){const n=$('#htmlIn').value.length;$('#sizeHint').textContent=n?`${(n/1000).toFixed(1)}천 자${n>MAX?' · 너무 길어서 올릴 수는 없어요':''}`:'';}
